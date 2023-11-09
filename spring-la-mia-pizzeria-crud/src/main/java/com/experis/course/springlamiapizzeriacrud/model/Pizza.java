@@ -18,6 +18,7 @@ public class Pizza {
     private String urlImage;
     private BigDecimal prezzo;
     private LocalDateTime createdAt;
+    
 
     public Integer getId() {
         return id;

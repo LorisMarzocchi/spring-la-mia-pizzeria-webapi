@@ -22,7 +22,7 @@ public class PizzaController {
     public String index(Model model) {
         List<Pizza> pizzaList = pizzaRepository.findAll();
         model.addAttribute("pizzaList", pizzaList);
-        return "pizza/pizzaList";
+        return "pizzas/pizzaList";
     }
 
 //    INSERT INTO books (authors, created_at, isbn, publisher, synopsis, title, `year`) VALUES('Melville', '2023-11-09 11:37:00', '5556547896541', 'Penguin', '', 'Moby Dick', 1865);
