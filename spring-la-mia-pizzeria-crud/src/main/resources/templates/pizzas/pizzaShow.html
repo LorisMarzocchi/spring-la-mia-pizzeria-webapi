@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{/fragments/resources :: headResources('pizzas-list')}"></head>
+
+<body>
+<nav th:replace="~{/fragments/navbar :: topNavbar('pizzas-list')}"></nav>
+<div class="container" th:object="${pizza}">
+    <h1 th:text="*{nome}"></h1>
+    
+    <hr>
+    <dl>
+        <dt>Descrizione</dt>
+        <dd th:text="*{descrizione}"></dd>
+        <dt>Immagine</dt>
+        <dd>
+            <img th:src="*{urlImage}" alt="" th:alt="*{nome}">
+        </dd>
+        <dt>Prezzo</dt>
+        <dd th:text="*{prezzo} + ' €'"></dd>
+        <dt>Aggiunta al catalogo</dt>
+        <dd th:text="*{#temporals.format(createdAt, 'dd-MM-yyyy')}"></dd>
+    </dl>
+    <div class="mt-2">
+        <a th:href="@{/pizzas}" class="btn btn-primary">Torna alla lista</a>
+    </div>
+</div>
+</body>
+</html>

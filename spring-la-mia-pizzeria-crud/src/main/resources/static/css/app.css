@@ -28,8 +28,8 @@
             color:  #0080ff;
         }
 
-        img {
-            max-width: 80px; /* Adjust as needed */
+        .imgList {
+            max-width: 80px;
             height: auto;
             display: block;
             margin: auto;
@@ -37,4 +37,10 @@
 
         .table td, .table th {
             vertical-align: middle;
+        }
+        i{
+        display: block;
+            color: blue;
+            height: 2rem;
+            width: 2rem;
         }
