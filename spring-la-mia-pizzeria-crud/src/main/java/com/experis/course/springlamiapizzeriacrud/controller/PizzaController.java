@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,19 +25,27 @@ public class PizzaController {
     private PizzaRepository pizzaRepository;
 
     @GetMapping
-    public String index(@RequestParam Optional<String> search, Model model) {
+    public String index(
+            @RequestParam Optional<String> search,
+            @RequestParam Optional<BigDecimal> searchPrezzo,
+            Model model) {
 //        List<Pizza> pizzaList = pizzaRepository.findAll();
 //        model.addAttribute("pizzaList", pizzaList);
 //        return "pizzas/pizzaList";
         List<Pizza> pizzaList;
-        if (search.isPresent()) {
+        if (search.isPresent() && searchPrezzo.isPresent()) {
+            pizzaList = pizzaRepository.findByNomeContainingIgnoreCaseAndPrezzoLessThanEqual(search.get(), searchPrezzo.get());
+        } else if (search.isPresent()) {
+            // Applica solo il filtro per il nome
             pizzaList = pizzaRepository.findByNomeContainingIgnoreCase(search.get());
+        } else if (searchPrezzo.isPresent()) {
+            pizzaList = pizzaRepository.findByPrezzoLessThanEqual(searchPrezzo.get());
         } else {
             pizzaList = pizzaRepository.findAll();
         }
         model.addAttribute("pizzaList", pizzaList);
         return "pizzas/pizzaList";
-        
+
     }
 
     //    INSERT INTO books (authors, created_at, isbn, publisher, synopsis, title, `year`) VALUES('Melville', '2023-11-09 11:37:00', '5556547896541', 'Penguin', '', 'Moby Dick', 1865);

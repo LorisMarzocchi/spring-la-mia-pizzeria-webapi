@@ -48,3 +48,9 @@
             color: white;
 
         }
+        /* Nasconde le frecce per gli input di tipo number in Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
