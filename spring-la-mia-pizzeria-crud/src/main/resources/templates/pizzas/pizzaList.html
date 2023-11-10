@@ -5,7 +5,7 @@
 <nav th:replace="~{/fragments/navbar :: topNavbar('pizzas-list')}"></nav>
 <div class="container mt-5">
     <div class="d-flex mb-5 align-items-center justify-content-between">
-        <h1>Pizza List</h1>
+        <h1>Lista pizze</h1>
         
         <form th:action="@{/pizzas}" method="GET">
             <div class="input-group">
@@ -42,7 +42,7 @@
                 <td th:text="*{prezzo}"></td>
                 <td>
                     <i class="fa-solid fa-pizza-slice"></i>
-                    <a th:href="@{/pizzas/show/{id}(id=${pizza.id})}" title="details">Show
+                    <a class="showDetail" th:href="@{/pizzas/show/{id}(id=*{id})}" title="details">Show
                         Detail</a>
                 </td>
             </tr>
