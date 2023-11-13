@@ -23,6 +23,10 @@
         
         </form>
     </div>
+    <div>
+        <a class="btn btn-primary" th:href="@{/pizzas/create}" title="create">Aggiungi Nuova Pizza</a>
+    
+    </div>
     <div th:if="${pizzaList.size() > 0}">
         <table class="table mb-4 table-dark table-hover">
             <thead class="">
@@ -50,6 +54,7 @@
             </tr>
             </tbody>
         </table>
+    
     
     </div>
     <div th:unless="${pizzaList.size() > 0}">No results</div>
