@@ -77,8 +77,6 @@ public class PizzaController {
 //        SETTO IL TIMESTAMP
 //        formPizza.setCreatedAt(LocalDateTime.now());
         Pizza savedPizza = null;
-
-
         try {
             savedPizza = pizzaRepository.save(formPizza);
         } catch (RuntimeException e) {
@@ -88,6 +86,6 @@ public class PizzaController {
 //        String redirectUrl = "redirect:/pizzas/show" +
         return "redirect:/pizzas/show/" + savedPizza.getId();
     }
-
+  
 
 }

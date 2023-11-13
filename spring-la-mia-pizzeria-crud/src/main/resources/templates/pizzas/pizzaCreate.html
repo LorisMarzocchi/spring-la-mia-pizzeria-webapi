@@ -2,8 +2,9 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:insert="~{/fragments/resources :: headResources('pizza-create')}"></head>
 <body>
+<nav th:replace="~{/fragments/navbar :: topNavbar('pizzas-create')}"></nav>
 <div class="container mt-4 mx-auto">
-    <h2>Aggiungi Nuova Pizza</h2>
+    <h2>Aggiungi Una Nuova Pizza</h2>
     <form th:action="@{/pizzas/store}" th:object="${pizza}" method="POST" class="w-50 m-auto">
         
         <!-- Campo per il nome -->

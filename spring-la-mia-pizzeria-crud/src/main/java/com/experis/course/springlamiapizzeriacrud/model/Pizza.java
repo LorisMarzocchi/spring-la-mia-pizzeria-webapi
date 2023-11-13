@@ -3,6 +3,7 @@ package com.experis.course.springlamiapizzeriacrud.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.validator.constraints.URL;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -16,17 +17,19 @@ public class Pizza {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @NotBlank(message = "il nome non puo essere vuoto")
-    @Size(min = 2, max = 25, message = "non deve essere maggiore di 25 caratteri")
+    @Size(min = 5, max = 25, message = "non deve essere minore di 5 e maggiore di 25 caratteri")
     @Column(length = 25, nullable = false, unique = true)
     private String nome;
     @NotBlank(message = "il campo descrizione non puo essere vuoto")
     @Size(min = 5, max = 255, message = "il campo non deve essere maggiore di 255 caratteri")
     private String descrizione;
     @NotBlank(message = "il campo Url non puo essere vuoto")
-    @Size(min = 5, max = 255, message = "il campo non deve essere maggiore di 255 caratteri")
+    @Size(min = 5, max = 255, message = "il campo non deve essere minore di 5 e maggiore di 255 caratteri")
+    @URL(message = "inserisci un url valido")
     private String urlImage;
     @NotNull(message = "il campo prezzo non puo essere vuoto")
-    @DecimalMin(value = "0.0", message = "Il prezzo non può essere inferiore a 0")
+    @DecimalMin(value = "0.01", message = "Il prezzo non può essere inferiore o uguale a 0")
+    @DecimalMax(value = "100.0", message = "Il prezzo non può essere maggiore di 100")
     @Digits(integer = 3, fraction = 2, message = "Il prezzo deve avere al massimo 3 cifre intere e 2 decimali")
     private BigDecimal prezzo;
     @CreationTimestamp
