@@ -5,8 +5,9 @@
 <body>
 <nav th:replace="~{/fragments/navbar :: topNavbar('pizzas-show')}"></nav>
 <div class="container" th:object="${pizza}">
-    <h1 th:text="*{nome}"></h1>
     
+    
+    <h1 th:text="*{nome}"></h1>
     <hr>
     <dl>
         <dt>Descrizione</dt>

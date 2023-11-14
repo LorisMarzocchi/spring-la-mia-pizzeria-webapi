@@ -17,14 +17,14 @@ public class Pizza {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @NotBlank(message = "il nome non puo essere vuoto")
-    @Size(min = 5, max = 25, message = "non deve essere minore di 5 e maggiore di 25 caratteri")
+    @Size(min = 5, max = 25, message = "il campo non può essere minore di 5 e maggiore di 25 caratteri")
     @Column(length = 25, nullable = false, unique = true)
     private String nome;
     @NotBlank(message = "il campo descrizione non puo essere vuoto")
-    @Size(min = 5, max = 255, message = "il campo non deve essere maggiore di 255 caratteri")
+    @Size(min = 5, max = 255, message = "il campo non può essere minore di 5 maggiore di 255 caratteri")
     private String descrizione;
     @NotBlank(message = "il campo Url non puo essere vuoto")
-    @Size(min = 5, max = 255, message = "il campo non deve essere minore di 5 e maggiore di 255 caratteri")
+    @Size(min = 5, max = 255, message = "il campo non può essere minore di 5 e maggiore di 255 caratteri")
     @URL(message = "inserisci un url valido")
     private String urlImage;
     @NotNull(message = "il campo prezzo non puo essere vuoto")

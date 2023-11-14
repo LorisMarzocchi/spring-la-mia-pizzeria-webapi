@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:insert="~{/fragments/resources :: headResources('pizza-create')}"></head>
+<head th:insert="~{/fragments/resources :: headResources('pizzas-edit')}"></head>
 <body>
-<nav th:replace="~{/fragments/navbar :: topNavbar('pizzas-create')}"></nav>
-<div class="container mt-4 mx-auto">
-    <h2>Aggiungi Una Nuova Pizza</h2>
-    <form th:action="@{/pizzas/store}" th:object="${pizza}" method="POST" class="w-25 m-auto">
+<nav th:replace="~{/fragments/navbar :: topNavbar('pizzas-edit')}"></nav>
+<div class="container mt-4">
+    <h2>Modifica Pizza</h2>
+    <form th:action="@{/pizzas/edit/{id}(id=${pizza.id})}" th:object="${pizza}" method="POST" class="w-25 m-auto">
         
         <!-- Campo per il nome -->
         <div class="mb-3" th:insert="/fragments/components :: formField('text', 'Nome', 'nome')">
@@ -33,9 +33,10 @@
             <!--                   placeholder="Inserisci il prezzo">-->
         </div>
         
-        <!-- Pulsante di invio -->
-        <button type="submit" class="btn btn-primary">Aggiungi Pizza</button>
-        <a th:href="@{/pizzas}" class="btn btn-primary">Torna alla lista</a>
+        
+        <!-- Pulsanti di azione -->
+        <button type="submit" class="btn btn-primary">Salva Modifiche</button>
+        <a th:href="@{/pizzas}" class="btn btn-secondary">Annulla</a>
     </form>
 </div>
 

@@ -4,8 +4,14 @@
 <body>
 <nav th:replace="~{/fragments/navbar :: topNavbar('pizzas-list')}"></nav>
 <div class="container mt-5">
-    <div class="d-flex mb-5 align-items-center justify-content-between">
+    <div th:if="${message !=null}" class="alert alert-success alert-dismissible fade show">
+        <span th:text="${message}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    </div>
+    <div class="d-flex mb-5 container align-items-center justify-content-between">
         <h1>Lista pizze</h1>
+        
         
         <form th:action="@{/pizzas}" method="GET">
             <div class="input-group">
@@ -47,9 +53,20 @@
                 </td>
                 <td th:text="*{prezzo}"></td>
                 <td>
-                    <i class="fa-solid fa-pizza-slice"></i>
-                    <a class="showDetail" th:href="@{/pizzas/show/{id}(id=*{id})}" title="details">Show
-                        Detail</a>
+                    <div class="d-flex justify-content-around">
+                    
+                    
+                    <a class="showDetail btn btn-primary " th:href="@{/pizzas/show/{id}(id=*{id})}" title="details">
+                        <i class="me-1 fa-solid fa-pizza-slice"></i>Dettagli</a>
+                        
+                    <a class="showEdit btn btn-primary" th:href="@{/pizzas/edit/{id}(id=*{id})}" title="edit">
+                        Modifica</a>
+                        
+                    <form method="POST" onsubmit="return confirm('Sei sicuro?')"
+                          th:action="@{/pizzas/delete/{id}(id=*{id})}">
+                        <button type="submit" class="btn btn-primary">Elimina</button>
+                    </form>
+                    </div>
                 </td>
             </tr>
             </tbody>

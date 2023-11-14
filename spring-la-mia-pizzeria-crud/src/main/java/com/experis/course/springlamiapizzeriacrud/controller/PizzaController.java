@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -79,6 +80,7 @@ public class PizzaController {
         Pizza savedPizza = null;
         try {
             savedPizza = pizzaRepository.save(formPizza);
+
         } catch (RuntimeException e) {
             bindingResult.addError(new FieldError("pizza", "nome", formPizza.getNome(), false, null, null, "il nome deve essere unico"));
             return "pizzas/pizzaCreate";
@@ -86,6 +88,62 @@ public class PizzaController {
 //        String redirectUrl = "redirect:/pizzas/show" +
         return "redirect:/pizzas/show/" + savedPizza.getId();
     }
-  
+
+
+    // metodo che mostra la pagina di modifica di un libro
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable Integer id, Model model) {
+//       DALL'ID RECUPERO I DATI
+        Optional<Pizza> result = pizzaRepository.findById(id);
+        if (result.isPresent()) {
+
+            model.addAttribute("pizza", result.get());
+
+            return "/pizzas/pizzaEdit";
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "pizza with id " + id + " not found");
+        }
+    }
+
+
+    // metodo che riceve il submit del form di edit e salva il libro
+    @PostMapping("/edit/{id}")
+    public String saveEdit(@PathVariable Integer id, @Valid @ModelAttribute("pizza") Pizza formPizza, BindingResult bindingResult) {
+
+        //  VALIDO LA MAPPA DI BindingResult
+
+        if (bindingResult.hasErrors()) {
+
+            //  SE CI SONO ERRORI RICARICA LA PAGINA
+
+            return "/pizzas/pizzaEdit";
+
+        }
+
+        Pizza pizzaToEdit = pizzaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        pizzaToEdit.setNome(formPizza.getNome());
+        pizzaToEdit.setDescrizione(formPizza.getDescrizione());
+        pizzaToEdit.setUrlImage(formPizza.getUrlImage());
+        pizzaToEdit.setPrezzo(formPizza.getPrezzo());
+
+        Pizza savedPizza = pizzaRepository.save(pizzaToEdit);
+
+        return "redirect:/pizzas/show/" + savedPizza.getId();
+    }
+
+
+    // metodo per eliminare un libro da database
+    @PostMapping("/delete/{id}")
+    public String delete(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
+
+        Pizza deletePizza = pizzaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        pizzaRepository.deleteById(id);
+        redirectAttributes.addFlashAttribute("message", "pizza " + deletePizza.getNome() + " eliminata");
+
+        return "redirect:/pizzas";
+    }
+
 
 }
