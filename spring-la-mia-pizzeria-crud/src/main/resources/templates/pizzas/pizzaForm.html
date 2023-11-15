@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" th:with="isEdit= ${pizza.id !=null}">
-<head th:insert="~{fragments/resources :: headResources(${isEdit ? 'Edit Pizza' : 'Create Pizza'})}"></head>
+<head th:insert="~{::headResources(title=${isEdit ? 'Edit Offerta Speciale' : 'Create Offerta Speciale'})}"></head>
 <body>
 <nav th:replace="~{/fragments/navbar :: topNavbar('pizzas-create')}"></nav>
 <div class="container mt-4 mx-auto">

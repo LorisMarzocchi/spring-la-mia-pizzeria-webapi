@@ -40,6 +40,15 @@ public class Pizza {
     @OneToMany(mappedBy = "pizza")
     private List<OffertaSpeciale> offertaSpeciale = new ArrayList<>();
 
+    public List<OffertaSpeciale> getOffertaSpeciale() {
+        return offertaSpeciale;
+    }
+
+    public void setOffertaSpeciale(List<OffertaSpeciale> offertaSpeciale) {
+        this.offertaSpeciale = offertaSpeciale;
+    }
+
+
     public Integer getId() {
         return id;
     }

@@ -23,7 +23,7 @@ public class OffertaService {
         Pizza pizza = pizzaRepository.findById(pizzaId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pizza with id " + pizzaId + " not found"));
         OffertaSpeciale offertaSpeciale = new OffertaSpeciale();
-      
+
         offertaSpeciale.setDataInizio(LocalDate.now());
         offertaSpeciale.setDataFine(LocalDate.now().plusMonths(1));
         offertaSpeciale.setPizza(pizza);

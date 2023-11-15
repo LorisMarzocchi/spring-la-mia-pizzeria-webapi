@@ -25,21 +25,34 @@
         <a th:href="@{/pizzas}" class="btn btn-primary">Torna alla lista</a>
     </div>
     <section>
-        <h2>Offerte Speciali</h2>
+        <h2>Offerte Speciali
+            <a th:href="@{/offerte/create(pizzaId=*{id})}" class="btn btn-primary">
+                Aggiungi Offerta Speciale
+            </a>
+        </h2>
+        
         <table class="table">
             <thead>
             <tr>
                 <th>Data di Inizio</th>
                 <th>Data di Fine</th>
+                <th>Titolo</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="offerta : *{offertaSpeciale}">
+            <tr th:each="offerta : *{offertaSpeciale}" th:object="${offerta}">
                 <td th:text="*{#temporals.format(offerta.dataInizio, 'dd-MM-yyyy')}"></td>
                 <td th:text="*{#temporals.format(offerta.dataFine, 'dd-MM-yyyy')}"></td>
+                <td th:text="*{titolo}"></td>
+                <td>
+                    <a class="btn btn-primary" th:href="@{/edit/{id}(id=*{id})}"
+                       title="Modifica Offerta Speciale">Modifica Offerta Speciale</a>
+                </td>
             </tr>
             </tbody>
         </table>
+        <div th:if="*{offertaSpeciale.size() == 0}" class="alert alert-info">Non ci sono offerte speciali</div>
     </section>
 </div>
 </body>
