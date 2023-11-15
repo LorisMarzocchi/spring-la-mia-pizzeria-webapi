@@ -1,11 +1,10 @@
 package com.experis.course.springlamiapizzeriacrud.service;
 
+import com.experis.course.springlamiapizzeriacrud.exception.PizzaNotFoundException;
 import com.experis.course.springlamiapizzeriacrud.model.Pizza;
 import com.experis.course.springlamiapizzeriacrud.repository.PizzaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -38,7 +37,7 @@ public class PizzaService {
             return result.get();
         } else {
             // se non ho trovato la pizza sollevo un'eccezione
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pizza with id " + id + " not found");
+            throw new PizzaNotFoundException("Pizza with id " + id + " not found");
         }
     }
 

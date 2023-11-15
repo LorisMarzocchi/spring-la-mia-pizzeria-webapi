@@ -1,6 +1,7 @@
 package com.experis.course.springlamiapizzeriacrud.controller;
 
 
+import com.experis.course.springlamiapizzeriacrud.exception.PizzaNotFoundException;
 import com.experis.course.springlamiapizzeriacrud.model.Pizza;
 import com.experis.course.springlamiapizzeriacrud.service.PizzaService;
 import jakarta.validation.Valid;
@@ -25,8 +26,7 @@ public class PizzaController {
     @Autowired
     private PizzaService pizzaService;
 
-    @GetMapping
-//    public String index(
+    //    public String index(
 //            @RequestParam Optional<String> search,
 //            @RequestParam Optional<BigDecimal> searchPrezzo,
 //            Model model) {
@@ -51,6 +51,7 @@ public class PizzaController {
 //        return "pizzas/pizzaList";
 //
 //    }
+    @GetMapping
     public String index(@RequestParam Optional<String> search, @RequestParam Optional<BigDecimal> searchPrezzo, Model model) {
         List<Pizza> pizzaList = pizzaService.getPizzaList(search, searchPrezzo);
         model.addAttribute("pizzaList", pizzaList);
@@ -58,8 +59,9 @@ public class PizzaController {
     }
 
     //    INSERT INTO books (authors, created_at, isbn, publisher, synopsis, title, `year`) VALUES('Melville', '2023-11-09 11:37:00', '5556547896541', 'Penguin', '', 'Moby Dick', 1865);
-    @GetMapping("/show/{id}")
-//    public String show(@PathVariable Integer id, Model model) {
+
+
+    //    public String show(@PathVariable Integer id, Model model) {
 //        Optional<Pizza> result = pizzaRepository.findById(id);
 //        // verifico se il risultato è presente
 //        if (result.isPresent()) {
@@ -71,13 +73,14 @@ public class PizzaController {
 //            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "pizza with id " + id + " not found");
 //        }
 //    }
+    @GetMapping("/show/{id}")
     public String show(@PathVariable Integer id, Model model) {
         try {
             Pizza pizza = pizzaService.getPizzaById(id);
             model.addAttribute("pizza", pizza);
             return "pizzas/pizzaShow";
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (PizzaNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
@@ -179,7 +182,7 @@ public class PizzaController {
         try {
             Pizza updatedPizza = pizzaService.updatePizza(formPizza);
             return "redirect:/pizzas/show/" + updatedPizza.getId();
-        } catch (ResponseStatusException e) {
+        } catch (PizzaNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
@@ -205,7 +208,7 @@ public class PizzaController {
             pizzaService.deletePizza(id);
             redirectAttributes.addFlashAttribute("deleteMessage", "Pizza " + deletedPizza.getNome() + " eliminata definitivamente");
             return "redirect:/pizzas";
-        } catch (ResponseStatusException e) {
+        } catch (PizzaNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }

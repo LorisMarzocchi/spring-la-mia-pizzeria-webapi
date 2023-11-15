@@ -1,5 +1,7 @@
 package com.experis.course.springlamiapizzeriacrud.controller;
 
+import com.experis.course.springlamiapizzeriacrud.exception.OffertaNotFoundException;
+import com.experis.course.springlamiapizzeriacrud.exception.PizzaNotFoundException;
 import com.experis.course.springlamiapizzeriacrud.model.OffertaSpeciale;
 import com.experis.course.springlamiapizzeriacrud.service.OffertaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +21,10 @@ public class OffertaController {
     @GetMapping("/create")
     public String create(@RequestParam Integer pizzaId, Model model) {
         try {
-            OffertaSpeciale offertaSpeciale = offertaService.createNewOfferta(pizzaId);
-            model.addAttribute("offertaSpeciale", offertaSpeciale);
+//            OffertaSpeciale offertaSpeciale = offertaService.createNewOfferta(pizzaId);
+            model.addAttribute("offertaSpeciale", offertaService.createNewOfferta(pizzaId));
             return "offerte/offertaForm";
-        } catch (ResponseStatusException e) {
+        } catch (PizzaNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
@@ -37,7 +39,7 @@ public class OffertaController {
         // Salva su database
         OffertaSpeciale savedOffertaSpeciale = offertaService.saveOfferta(formOffertaSpeciale);
         // Redirect alla visualizzazione dell'offerta speciale
-        return "redirect:/offerte/show/" + savedOffertaSpeciale.getId();
+        return "redirect:/pizzas/show/" + savedOffertaSpeciale.getPizza().getId();
     }
 
     @GetMapping("/edit/{id}")
@@ -46,7 +48,7 @@ public class OffertaController {
             OffertaSpeciale offertaSpeciale = offertaService.getOfferta(id);
             model.addAttribute("offertaSpeciale", offertaSpeciale);
             return "offerte/offertaForm";
-        } catch (ResponseStatusException e) {
+        } catch (OffertaNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
@@ -62,7 +64,7 @@ public class OffertaController {
         // Salva su database
         OffertaSpeciale savedOffertaSpeciale = offertaService.saveOfferta(formOffertaSpeciale);
         // Redirect alla visualizzazione dell'offerta speciale
-        return "redirect:/offerte/show/" + savedOffertaSpeciale.getId();
+        return "redirect:/pizzas/show/" + savedOffertaSpeciale.getPizza().getId();
     }
 
 
