@@ -54,8 +54,8 @@
             -webkit-appearance: none;
             margin: 0;
         }
-        /*
-            .active{
-                color: red;
-            }
-        */
+
+        .active {
+            color: red!important;
+        }
+

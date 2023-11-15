@@ -30,10 +30,12 @@ public class PizzaController {
             @RequestParam Optional<String> search,
             @RequestParam Optional<BigDecimal> searchPrezzo,
             Model model) {
+//        throw new RuntimeException("FORCE ERROR"); serve per forzare errori
 //        List<Pizza> pizzaList = pizzaRepository.findAll();
 //        model.addAttribute("pizzaList", pizzaList);
 //        return "pizzas/pizzaList";
         List<Pizza> pizzaList;
+
         if (search.isPresent() && searchPrezzo.isPresent()) {
             pizzaList = pizzaRepository.findByNomeContainingIgnoreCaseAndPrezzoLessThanEqual(search.get(), searchPrezzo.get());
         } else if (search.isPresent()) {
@@ -45,6 +47,7 @@ public class PizzaController {
             pizzaList = pizzaRepository.findAll();
         }
         model.addAttribute("pizzaList", pizzaList);
+//        model.addAttribute("searchKeyword", search.orElse(""));
         return "pizzas/pizzaList";
 
     }
@@ -57,7 +60,7 @@ public class PizzaController {
         if (result.isPresent()) {
             // passo al template l'oggetto Book
             model.addAttribute("pizza", result.get());
-            return "pizzas/pizzaShow";
+            return "/pizzas/pizzaShow";
         } else {
             // se non ho trovato la pizza sollevo un'eccezione
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "pizza with id " + id + " not found");
@@ -67,13 +70,13 @@ public class PizzaController {
     @GetMapping("/create")
     public String create(Model model) {
         model.addAttribute("pizza", new Pizza());
-        return "pizzas/pizzaCreate";
+        return "pizzas/pizzaForm";
     }
 
     @PostMapping("/store")
     public String store(@Valid @ModelAttribute("pizza") Pizza formPizza, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "pizzas/pizzaCreate";
+            return "pizzas/pizzaForm";
         }
 //        SETTO IL TIMESTAMP
 //        formPizza.setCreatedAt(LocalDateTime.now());
@@ -83,7 +86,7 @@ public class PizzaController {
 
         } catch (RuntimeException e) {
             bindingResult.addError(new FieldError("pizza", "nome", formPizza.getNome(), false, null, null, "il nome deve essere unico"));
-            return "pizzas/pizzaCreate";
+            return "pizzas/pizzaForm";
         }
 //        String redirectUrl = "redirect:/pizzas/show" +
         return "redirect:/pizzas/show/" + savedPizza.getId();
@@ -99,7 +102,7 @@ public class PizzaController {
 
             model.addAttribute("pizza", result.get());
 
-            return "/pizzas/pizzaEdit";
+            return "pizzas/pizzaForm";
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "pizza with id " + id + " not found");
         }
@@ -108,28 +111,30 @@ public class PizzaController {
 
     // metodo che riceve il submit del form di edit e salva il libro
     @PostMapping("/edit/{id}")
-    public String saveEdit(@PathVariable Integer id, @Valid @ModelAttribute("pizza") Pizza formPizza, BindingResult bindingResult) {
+    public String update(@PathVariable Integer id, @Valid @ModelAttribute("pizza") Pizza formPizza, BindingResult bindingResult) {
 
         //  VALIDO LA MAPPA DI BindingResult
 
         if (bindingResult.hasErrors()) {
 
-            //  SE CI SONO ERRORI RICARICA LA PAGINA
+            // SE CI SONO ERRORI RICARICA LA PAGINA
 
-            return "/pizzas/pizzaEdit";
+            return "pizzas/pizzaForm";
 
+        } else {
+            // recupero la pizza che voglio modificare da db
+            Pizza pizzaToEdit = pizzaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+            //  se lo trovo modifico solo gli attributi che erano campi del form
+            pizzaToEdit.setNome(formPizza.getNome());
+            pizzaToEdit.setDescrizione(formPizza.getDescrizione());
+            pizzaToEdit.setUrlImage(formPizza.getUrlImage());
+            pizzaToEdit.setPrezzo(formPizza.getPrezzo());
+
+            Pizza savedPizza = pizzaRepository.save(pizzaToEdit);
+
+            return "redirect:/pizzas/show/" + savedPizza.getId();
         }
-
-        Pizza pizzaToEdit = pizzaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-        pizzaToEdit.setNome(formPizza.getNome());
-        pizzaToEdit.setDescrizione(formPizza.getDescrizione());
-        pizzaToEdit.setUrlImage(formPizza.getUrlImage());
-        pizzaToEdit.setPrezzo(formPizza.getPrezzo());
-
-        Pizza savedPizza = pizzaRepository.save(pizzaToEdit);
-
-        return "redirect:/pizzas/show/" + savedPizza.getId();
     }
 
 
@@ -137,10 +142,12 @@ public class PizzaController {
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
 
+        // recuperiamo la pizza con quell'id
         Pizza deletePizza = pizzaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
+        // se esiste lo elimino
         pizzaRepository.deleteById(id);
-        redirectAttributes.addFlashAttribute("message", "pizza " + deletePizza.getNome() + " eliminata");
+        redirectAttributes.addFlashAttribute("deleteMessage", "pizza " + deletePizza.getNome() + " eliminata definitivamente");
 
         return "redirect:/pizzas";
     }

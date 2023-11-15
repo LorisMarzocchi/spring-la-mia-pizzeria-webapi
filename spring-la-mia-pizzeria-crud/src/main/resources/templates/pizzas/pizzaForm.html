@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:with="isEdit= ${pizza.id !=null}">
+<head th:insert="fragments/resources :: headResources(${isEdit ? 'Edit Book' : 'Create Book'})"></head>
+<body>
+<nav th:replace="~{/fragments/navbar :: topNavbar('pizzas-create')}"></nav>
+<div class="container mt-4 mx-auto">
+    <h1 class="text-danger fw-bolder text-decoration-underline py-4"
+        th:text="${isEdit ? 'Modifica Pizza' : 'Crea Pizza'}"></h1>
+    <form th:with="actionUrl=${isEdit ? '/pizza/edit/' + pizza.id : 'pizza/store'}"
+          th:action="@{${actionUrl}}"
+          method="POST"
+          th:object="${pizza}"
+          class="row gy-2 w-25 m-auto">
+        
+        <!-- Campo per il nome -->
+        <div class="mb-3" th:insert="/fragments/components :: formField('text', 'Nome', 'nome')">
+        </div>
+        
+        
+        <!-- Campo per la descrizione -->
+        <div class="mb-3" th:insert="/fragments/components :: formField('text', 'Descrizione', 'descrizione')">
+            <!--            <label for="descrizione" class="form-label">Descrizione</label>-->
+            <!--            <textarea class="form-control" id="descrizione" th:field="*{descrizione}"-->
+            <!--                      placeholder="Inserisci la descrizione della pizza"></textarea>-->
+        </div>
+        
+        <!-- Campo per l'URL dell'immagine -->
+        <div class="mb-3" th:insert="/fragments/components :: formField('text', 'UrlImage', 'urlImage')">
+            <!--            <label for="urlImage" class="form-label">URL Immagine</label>-->
+            <!--            <input type="text" class="form-control" id="urlImage" th:field="*{urlImage}"-->
+            <!--                   placeholder="Inserisci l'URL dell'immagine">-->
+        </div>
+        
+        <!-- Campo per il prezzo -->
+        <div class="mb-3" th:insert="/fragments/components :: formField('number', 'Prezzo', 'prezzo')">
+            <!--            <label for="prezzo" class="form-label">Prezzo</label>-->
+            <!--            <input type="number" class="form-control" id="prezzo" th:field="*{prezzo}"-->
+            <!--                   placeholder="Inserisci il prezzo">-->
+        </div>
+        
+        <!-- Pulsante di invio -->
+        <button type="submit" class="btn btn-primary">Salva</button>
+        <a th:href="@{/pizzas}" class="btn btn-secondary">Torna alla lista</a>
+    </form>
+</div>
+
+</body>
+</html>
