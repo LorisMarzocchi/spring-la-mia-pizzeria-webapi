@@ -2,7 +2,7 @@ package com.experis.course.springlamiapizzeriacrud.controller;
 
 
 import com.experis.course.springlamiapizzeriacrud.model.Pizza;
-import com.experis.course.springlamiapizzeriacrud.repository.PizzaRepository;
+import com.experis.course.springlamiapizzeriacrud.service.PizzaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,47 +23,61 @@ import java.util.Optional;
 public class PizzaController {
 
     @Autowired
-    private PizzaRepository pizzaRepository;
+    private PizzaService pizzaService;
 
     @GetMapping
-    public String index(
-            @RequestParam Optional<String> search,
-            @RequestParam Optional<BigDecimal> searchPrezzo,
-            Model model) {
-//        throw new RuntimeException("FORCE ERROR"); serve per forzare errori
-//        List<Pizza> pizzaList = pizzaRepository.findAll();
+//    public String index(
+//            @RequestParam Optional<String> search,
+//            @RequestParam Optional<BigDecimal> searchPrezzo,
+//            Model model) {
+////        throw new RuntimeException("FORCE ERROR"); serve per forzare errori
+////        List<Pizza> pizzaList = pizzaRepository.findAll();
+////        model.addAttribute("pizzaList", pizzaList);
+////        return "pizzas/pizzaList";
+//        List<Pizza> pizzaList;
+//
+//        if (search.isPresent() && searchPrezzo.isPresent()) {
+//            pizzaList = pizzaRepository.findByNomeContainingIgnoreCaseAndPrezzoLessThanEqual(search.get(), searchPrezzo.get());
+//        } else if (search.isPresent()) {
+//            // Applica solo il filtro per il nome
+//            pizzaList = pizzaRepository.findByNomeContainingIgnoreCase(search.get());
+//        } else if (searchPrezzo.isPresent()) {
+//            pizzaList = pizzaRepository.findByPrezzoLessThanEqual(searchPrezzo.get());
+//        } else {
+//            pizzaList = pizzaRepository.findAll();
+//        }
 //        model.addAttribute("pizzaList", pizzaList);
+////        model.addAttribute("searchKeyword", search.orElse(""));
 //        return "pizzas/pizzaList";
-        List<Pizza> pizzaList;
-
-        if (search.isPresent() && searchPrezzo.isPresent()) {
-            pizzaList = pizzaRepository.findByNomeContainingIgnoreCaseAndPrezzoLessThanEqual(search.get(), searchPrezzo.get());
-        } else if (search.isPresent()) {
-            // Applica solo il filtro per il nome
-            pizzaList = pizzaRepository.findByNomeContainingIgnoreCase(search.get());
-        } else if (searchPrezzo.isPresent()) {
-            pizzaList = pizzaRepository.findByPrezzoLessThanEqual(searchPrezzo.get());
-        } else {
-            pizzaList = pizzaRepository.findAll();
-        }
+//
+//    }
+    public String index(@RequestParam Optional<String> search, @RequestParam Optional<BigDecimal> searchPrezzo, Model model) {
+        List<Pizza> pizzaList = pizzaService.getPizzaList(search, searchPrezzo);
         model.addAttribute("pizzaList", pizzaList);
-//        model.addAttribute("searchKeyword", search.orElse(""));
         return "pizzas/pizzaList";
-
     }
 
     //    INSERT INTO books (authors, created_at, isbn, publisher, synopsis, title, `year`) VALUES('Melville', '2023-11-09 11:37:00', '5556547896541', 'Penguin', '', 'Moby Dick', 1865);
     @GetMapping("/show/{id}")
+//    public String show(@PathVariable Integer id, Model model) {
+//        Optional<Pizza> result = pizzaRepository.findById(id);
+//        // verifico se il risultato è presente
+//        if (result.isPresent()) {
+//            // passo al template l'oggetto Book
+//            model.addAttribute("pizza", result.get());
+//            return "/pizzas/pizzaShow";
+//        } else {
+//            // se non ho trovato la pizza sollevo un'eccezione
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "pizza with id " + id + " not found");
+//        }
+//    }
     public String show(@PathVariable Integer id, Model model) {
-        Optional<Pizza> result = pizzaRepository.findById(id);
-        // verifico se il risultato è presente
-        if (result.isPresent()) {
-            // passo al template l'oggetto Book
-            model.addAttribute("pizza", result.get());
-            return "/pizzas/pizzaShow";
-        } else {
-            // se non ho trovato la pizza sollevo un'eccezione
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "pizza with id " + id + " not found");
+        try {
+            Pizza pizza = pizzaService.getPizzaById(id);
+            model.addAttribute("pizza", pizza);
+            return "pizzas/pizzaShow";
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -73,83 +87,127 @@ public class PizzaController {
         return "pizzas/pizzaForm";
     }
 
+    //    @PostMapping("/store")
+//    public String store(@Valid @ModelAttribute("pizza") Pizza formPizza, BindingResult bindingResult) {
+//        if (bindingResult.hasErrors()) {
+//            return "pizzas/pizzaForm";
+//        }
+////        SETTO IL TIMESTAMP
+////        formPizza.setCreatedAt(LocalDateTime.now());
+//        Pizza savedPizza = null;
+//        try {
+//            savedPizza = pizzaRepository.save(formPizza);
+//
+//        } catch (RuntimeException e) {
+//            bindingResult.addError(new FieldError("pizza", "nome", formPizza.getNome(), false, null, null, "il nome deve essere unico"));
+//            return "pizzas/pizzaForm";
+//        }
+////        String redirectUrl = "redirect:/pizzas/show" +
+//        return "redirect:/pizzas/show/" + savedPizza.getId();
+//    }
     @PostMapping("/store")
     public String store(@Valid @ModelAttribute("pizza") Pizza formPizza, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "pizzas/pizzaForm";
         }
-//        SETTO IL TIMESTAMP
-//        formPizza.setCreatedAt(LocalDateTime.now());
-        Pizza savedPizza = null;
-        try {
-            savedPizza = pizzaRepository.save(formPizza);
 
+        try {
+            Pizza savedPizza = pizzaService.savePizza(formPizza);
+            return "redirect:/pizzas/show/" + savedPizza.getId();
         } catch (RuntimeException e) {
-            bindingResult.addError(new FieldError("pizza", "nome", formPizza.getNome(), false, null, null, "il nome deve essere unico"));
+            bindingResult.addError(new FieldError("pizza", "nome", e.getMessage(), false, null, null, "Il nome deve essere unico"));
             return "pizzas/pizzaForm";
         }
-//        String redirectUrl = "redirect:/pizzas/show" +
-        return "redirect:/pizzas/show/" + savedPizza.getId();
     }
 
 
     // metodo che mostra la pagina di modifica di un libro
+//    @GetMapping("/edit/{id}")
+//    public String edit(@PathVariable Integer id, Model model) {
+////       DALL'ID RECUPERO I DATI
+//        Optional<Pizza> result = pizzaRepository.findById(id);
+//        if (result.isPresent()) {
+//
+//            model.addAttribute("pizza", result.get());
+//
+//            return "pizzas/pizzaForm";
+//        } else {
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "pizza with id " + id + " not found");
+//        }
+//    }
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable Integer id, Model model) {
-//       DALL'ID RECUPERO I DATI
-        Optional<Pizza> result = pizzaRepository.findById(id);
-        if (result.isPresent()) {
-
-            model.addAttribute("pizza", result.get());
-
-            return "pizzas/pizzaForm";
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "pizza with id " + id + " not found");
-        }
+        Pizza pizza = pizzaService.getPizzaById(id);
+        model.addAttribute("pizza", pizza);
+        return "pizzas/pizzaForm";
     }
 
 
     // metodo che riceve il submit del form di edit e salva il libro
+//    @PostMapping("/edit/{id}")
+//    public String update(@PathVariable Integer id, @Valid @ModelAttribute("pizza") Pizza formPizza, BindingResult bindingResult) {
+//
+//        //  VALIDO LA MAPPA DI BindingResult
+//
+//        if (bindingResult.hasErrors()) {
+//
+//            // SE CI SONO ERRORI RICARICA LA PAGINA
+//
+//            return "pizzas/pizzaForm";
+//
+//        } else {
+//            // recupero la pizza che voglio modificare da db
+//            Pizza pizzaToEdit = pizzaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+//
+//            //  se lo trovo modifico solo gli attributi che erano campi del form
+//            pizzaToEdit.setNome(formPizza.getNome());
+//            pizzaToEdit.setDescrizione(formPizza.getDescrizione());
+//            pizzaToEdit.setUrlImage(formPizza.getUrlImage());
+//            pizzaToEdit.setPrezzo(formPizza.getPrezzo());
+//
+//            Pizza savedPizza = pizzaRepository.save(pizzaToEdit);
+//
+//            return "redirect:/pizzas/show/" + savedPizza.getId();
+//        }
+//    }
     @PostMapping("/edit/{id}")
     public String update(@PathVariable Integer id, @Valid @ModelAttribute("pizza") Pizza formPizza, BindingResult bindingResult) {
-
-        //  VALIDO LA MAPPA DI BindingResult
-
         if (bindingResult.hasErrors()) {
-
-            // SE CI SONO ERRORI RICARICA LA PAGINA
-
             return "pizzas/pizzaForm";
+        }
 
-        } else {
-            // recupero la pizza che voglio modificare da db
-            Pizza pizzaToEdit = pizzaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-            //  se lo trovo modifico solo gli attributi che erano campi del form
-            pizzaToEdit.setNome(formPizza.getNome());
-            pizzaToEdit.setDescrizione(formPizza.getDescrizione());
-            pizzaToEdit.setUrlImage(formPizza.getUrlImage());
-            pizzaToEdit.setPrezzo(formPizza.getPrezzo());
-
-            Pizza savedPizza = pizzaRepository.save(pizzaToEdit);
-
-            return "redirect:/pizzas/show/" + savedPizza.getId();
+        try {
+            Pizza updatedPizza = pizzaService.updatePizza(formPizza);
+            return "redirect:/pizzas/show/" + updatedPizza.getId();
+        } catch (ResponseStatusException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
 
     // metodo per eliminare un libro da database
+//    @PostMapping("/delete/{id}")
+//    public String delete(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
+//
+//        // recuperiamo la pizza con quell'id
+//        Pizza deletePizza = pizzaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+//
+//        // se esiste lo elimino
+//        pizzaRepository.deleteById(id);
+//        redirectAttributes.addFlashAttribute("deleteMessage", "pizza " + deletePizza.getNome() + " eliminata definitivamente");
+//
+//        return "redirect:/pizzas";
+//    }
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
-
-        // recuperiamo la pizza con quell'id
-        Pizza deletePizza = pizzaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-        // se esiste lo elimino
-        pizzaRepository.deleteById(id);
-        redirectAttributes.addFlashAttribute("deleteMessage", "pizza " + deletePizza.getNome() + " eliminata definitivamente");
-
-        return "redirect:/pizzas";
+        try {
+            Pizza deletedPizza = pizzaService.getPizzaById(id);
+            pizzaService.deletePizza(id);
+            redirectAttributes.addFlashAttribute("deleteMessage", "Pizza " + deletedPizza.getNome() + " eliminata definitivamente");
+            return "redirect:/pizzas";
+        } catch (ResponseStatusException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
 

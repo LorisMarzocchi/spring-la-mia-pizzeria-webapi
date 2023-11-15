@@ -24,6 +24,23 @@
     <div class="mt-2">
         <a th:href="@{/pizzas}" class="btn btn-primary">Torna alla lista</a>
     </div>
+    <section>
+        <h2>Offerte Speciali</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Data di Inizio</th>
+                <th>Data di Fine</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="offerta : *{offertaSpeciale}">
+                <td th:text="*{#temporals.format(offerta.dataInizio, 'dd-MM-yyyy')}"></td>
+                <td th:text="*{#temporals.format(offerta.dataFine, 'dd-MM-yyyy')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
 </div>
 </body>
 </html>

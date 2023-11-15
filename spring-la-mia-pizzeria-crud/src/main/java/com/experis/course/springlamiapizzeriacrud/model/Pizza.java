@@ -7,6 +7,8 @@ import org.hibernate.validator.constraints.URL;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "pizzas")
@@ -35,6 +37,8 @@ public class Pizza {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    @OneToMany(mappedBy = "pizza")
+    private List<OffertaSpeciale> offertaSpeciale = new ArrayList<>();
 
     public Integer getId() {
         return id;

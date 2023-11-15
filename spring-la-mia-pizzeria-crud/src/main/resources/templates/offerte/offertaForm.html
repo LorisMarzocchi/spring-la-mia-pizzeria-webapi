@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:with="isEdit=${offertaSpeciale.id != null}">
+<head
+        th:insert="~{/fragments/resources :: headResources(${isEdit ? 'Edit Offerta Speciale' : 'Create Offerta Speciale'})"></head>
+<body>
+<nav th:replace="fragments/navbar :: topNavbar('pizzas')"></nav>
+<div class="container">
+    <h1 th:text="${isEdit ? 'Edit Offerta Speciale' : 'Create Offerta Speciale'}"></h1>
+    <h2 class="text-muted"
+        th:text="${offertaSpeciale.pizza.nome} ? offertaSpeciale.pizza.nome : 'Nome Pizza non disponibile'"></h2>
+    <hr>
+    <form
+            th:with="actionUrl=${isEdit ? '/offerte/edit/' + offertaSpeciale.id : '/offerte/create'}"
+            id="offerta-form"
+            th:action="@{${actionUrl}}"
+            method="POST"
+            th:object="${offertaSpeciale}"
+            class="row"
+    >
+        <!-- hidden fields -->
+        <input type="hidden" th:field="*{pizza}">
+        <div class="col-6">
+            <label for="dataInizio" class="form-label">Data di inizio</label>
+            <input type="date" class="form-control" id="dataInizio" th:field="*{dataInizio}">
+        </div>
+        <div class="col-6">
+            <label for="dataFine" class="form-label">Data di fine</label>
+            <input type="date" class="form-control" id="dataFine" th:field="*{dataFine}">
+        </div>
+        <div class="col-12">
+            <label for="titolo" class="form-label">Titolo dell'Offerta Speciale</label>
+            <input type="text" class="form-control" id="titolo" th:field="*{titolo}">
+        </div>
+        <!-- actions -->
+        <div class="col-12">
+            <button class="btn btn-primary" type="submit">Salva</button>
+            <a th:href="@{/pizzas/show/{pizzaId}(pizzaId=*{pizza.id})}" class="btn btn-primary">Annulla</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>
