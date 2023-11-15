@@ -3,7 +3,7 @@
 
         body {
             background-color: #121212; /* Sfondo scuro */
-            color: #ffffff; /* Testo bianco */
+            color: white; /* Testo bianco */
         }
 
         .navbar {
@@ -11,11 +11,11 @@
         }
 
         .nav-link {
-            color: #ffffff; /* Testo dei link bianco */
+            color: white !important; /* Testo dei link bianco */
         }
 
         .nav-link.active {
-            color: #f0ad4e; /* Colore del link attivo */
+            color: red !important; /* Colore del link attivo */
         }
 
         .table {
