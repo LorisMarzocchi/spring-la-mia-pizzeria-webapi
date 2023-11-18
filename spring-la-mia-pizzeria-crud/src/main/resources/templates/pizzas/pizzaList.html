@@ -9,6 +9,7 @@
         <button type="button" class="btn-close custom-alert-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     </div>
+<div th:replace="fragments/components :: message"></div>
     <div class="d-flex mb-5 container align-items-center justify-content-between">
         <h1>Lista pizze</h1>
         
@@ -78,7 +79,7 @@
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
                                         <form method="POST"
-                                              th:action="@{/pizzas/delete/{id}(id=*{id})}">
+                                              th:action="@{/offerte/delete/{id}(id=*{id})}">
                                             <button type="submit" class="btn btn-primary color-danger">Elimina</button>
                                         </form>
                                     </div>

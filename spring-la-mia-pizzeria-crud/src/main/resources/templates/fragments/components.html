@@ -28,6 +28,12 @@
     </div>
 
 </th:block>
+<div
+        th:fragment="message"
+        th:if="${message !=null}" class="alert text-light alert-success alert-dismissible fade show">
+    <span th:text="${message}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
 
 </body>
 

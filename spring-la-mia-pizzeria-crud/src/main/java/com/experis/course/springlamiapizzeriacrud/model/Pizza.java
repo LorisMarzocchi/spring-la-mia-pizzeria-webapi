@@ -37,7 +37,7 @@ public class Pizza {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "pizza")
+    @OneToMany(mappedBy = "pizza", orphanRemoval = true)
     private List<OffertaSpeciale> offertaSpeciale = new ArrayList<>();
 
     public List<OffertaSpeciale> getOffertaSpeciale() {

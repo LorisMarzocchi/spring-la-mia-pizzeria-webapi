@@ -16,7 +16,6 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -26,6 +25,13 @@ public class PizzaController {
     @Autowired
     private PizzaService pizzaService;
 
+    //    }
+    @GetMapping
+    public String index(@RequestParam Optional<String> search, @RequestParam Optional<BigDecimal> searchPrezzo, Model model) {
+//        List<Pizza> pizzaList = pizzaService.getPizzaList(search, searchPrezzo);
+        model.addAttribute("pizzaList", pizzaService.getPizzaList(search, searchPrezzo));
+        return "pizzas/pizzaList";
+    }
     //    public String index(
 //            @RequestParam Optional<String> search,
 //            @RequestParam Optional<BigDecimal> searchPrezzo,
@@ -50,13 +56,6 @@ public class PizzaController {
 ////        model.addAttribute("searchKeyword", search.orElse(""));
 //        return "pizzas/pizzaList";
 //
-//    }
-    @GetMapping
-    public String index(@RequestParam Optional<String> search, @RequestParam Optional<BigDecimal> searchPrezzo, Model model) {
-        List<Pizza> pizzaList = pizzaService.getPizzaList(search, searchPrezzo);
-        model.addAttribute("pizzaList", pizzaList);
-        return "pizzas/pizzaList";
-    }
 
     //    INSERT INTO books (authors, created_at, isbn, publisher, synopsis, title, `year`) VALUES('Melville', '2023-11-09 11:37:00', '5556547896541', 'Penguin', '', 'Moby Dick', 1865);
 

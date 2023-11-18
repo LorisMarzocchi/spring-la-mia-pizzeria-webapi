@@ -17,7 +17,7 @@ public class PizzaService {
 
     //metodo per la lista di tutte le pizze
     public List<Pizza> getPizzaList(Optional<String> search, Optional<BigDecimal> searchPrezzo) {
-        List<Pizza> pizzaList;
+//        List<Pizza> pizzaList;
         if (search.isPresent() && searchPrezzo.isPresent()) {
             return pizzaRepository.findByNomeContainingIgnoreCaseAndPrezzoLessThanEqual(search.get(), searchPrezzo.get());
         } else if (search.isPresent()) {

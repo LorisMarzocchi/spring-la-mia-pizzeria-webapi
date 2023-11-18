@@ -5,7 +5,7 @@
 <body>
 <nav th:replace="~{/fragments/navbar :: topNavbar('pizzas')}"></nav>
 <div class="container" th:object="${pizza}">
-    
+    <div th:replace="fragments/components :: message"></div>
     
     <h1 th:text="*{nome}"></h1>
     <hr>
@@ -42,12 +42,18 @@
             </thead>
             <tbody>
             <tr th:each="offerta : *{OffertaSpeciale}" th:object="${offerta}">
-                <td th:text="*{#temporals.format(offerta.dataInizio, 'dd-MM-yyyy')}"></td>
-                <td th:text="*{#temporals.format(offerta.dataFine, 'dd-MM-yyyy')}"></td>
-                <td th:text="*{offerta.titolo}"></td>
+                <td th:text="*{dataInizio}"></td>
+                <td th:text="*{dataFine}"></td>
+                <td th:text="*{titolo}"></td>
                 <td>
-                    <a class="btn btn-primary" th:href="@{offerte/edit/{id}(id=*{id})}"
+                    <a class="btn btn-primary" th:href="@{/offerte/edit/{id}(id=*{id})}"
                        title="Modifica Offerta Speciale">Modifica Offerta Speciale</a>
+                </td>
+                <td>
+                    <form method="POST"
+                          th:action="@{/offerte/delete/{id}(id=*{id})}">
+                        <button type="submit" class="btn btn-primary color-danger">Elimina</button>
+                    </form>
                 </td>
             </tr>
             </tbody>

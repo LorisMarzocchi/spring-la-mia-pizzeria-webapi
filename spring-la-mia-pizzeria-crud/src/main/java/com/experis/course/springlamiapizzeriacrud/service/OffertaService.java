@@ -8,7 +8,6 @@ import com.experis.course.springlamiapizzeriacrud.repository.OffertaSpecialeRepo
 import com.experis.course.springlamiapizzeriacrud.repository.PizzaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 
@@ -20,7 +19,7 @@ public class OffertaService {
     @Autowired
     private PizzaRepository pizzaRepository;
 
-    public OffertaSpeciale createNewOfferta(Integer pizzaId) {
+    public OffertaSpeciale createNewOfferta(Integer pizzaId) throws PizzaNotFoundException {
         Pizza pizza = pizzaRepository.findById(pizzaId)
                 .orElseThrow(() -> new PizzaNotFoundException("Pizza con id " + pizzaId + " not found"));
         OffertaSpeciale offertaSpeciale = new OffertaSpeciale();
@@ -35,10 +34,14 @@ public class OffertaService {
         return offertaSpecialeRepository.save(offertaSpeciale);
     }
 
-    public OffertaSpeciale getOfferta(Integer id) throws ResponseStatusException {
+    public OffertaSpeciale getOfferta(Integer id) throws OffertaNotFoundException {
         return offertaSpecialeRepository.findById(id)
                 .orElseThrow(
                         () -> new OffertaNotFoundException("Offerta con id " + id + " not found"));
 
+    }
+
+    public void deleteOffer(OffertaSpeciale offertaSpeciale) {
+        offertaSpecialeRepository.delete(offertaSpeciale);
     }
 }

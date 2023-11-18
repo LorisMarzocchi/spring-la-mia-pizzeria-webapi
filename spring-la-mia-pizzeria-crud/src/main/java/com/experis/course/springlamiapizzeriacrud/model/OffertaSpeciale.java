@@ -14,6 +14,7 @@ public class OffertaSpeciale {
     @NotNull
     private LocalDate dataInizio;
     private LocalDate dataFine;
+    @NotNull
     private String titolo;
 
     @NotNull
