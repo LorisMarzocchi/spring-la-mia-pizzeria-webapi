@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{/fragments/resources :: headResources('Ingredients')}"></head>
+<body>
+<nav th:replace="~{fragments/navbar :: topNavbar('ingredients')}"></nav>
+<div class="container">
+    <h1 class="text-danger fw-bolder text-decoration-underline mt-4">Ingredienti</h1>
+    <hr>
+    <section class="mb-5">
+        <form
+                id="ingredient-form"
+                th:action="@{/ingredients}"
+                method="post"
+                th:object="${ingredientObj}">
+            <div class="col-12"
+                 th:insert="~{fragments/components :: formField('text', 'Aggiungi nome Ingrediente', 'nome')}"></div>
+            <button class="btn btn-primary mt-3" type="submit">Aggiungi alla lista</button>
+        </form>
+    </section>
+    <section class="mb-5">
+        <ul class="list-group list-group-flush">
+            <li
+                    class="list-group-item"
+                    th:each="ingredient : ${ingredients}">
+                <span th:text="${ingredient.nome}"></span>
+                <form th:action="@{/ingredients/delete}" method="post">
+                    <input type="hidden" name="id" th:value="${ingredient.id}"/>
+                    <button class="btn btn-danger btn-sm" type="submit">Elimina</button>
+                </form>
+            </li>
+        </ul>
+    </section>
+</div>
+</body>

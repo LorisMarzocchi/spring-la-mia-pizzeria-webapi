@@ -37,8 +37,18 @@ public class Pizza {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "pizza", orphanRemoval = true)
+    @OneToMany(mappedBy = "pizza", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<OffertaSpeciale> offertaSpeciale = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<Ingredient> ingredients = new ArrayList<>();
+
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
 
     public List<OffertaSpeciale> getOffertaSpeciale() {
         return offertaSpeciale;

@@ -19,3 +19,72 @@ INSERT INTO pizzas (nome, descrizione, prezzo, url_image, created_at) VALUES('Bu
 INSERT INTO pizzas (nome, descrizione, prezzo, url_image, created_at) VALUES('Prosciutto e Funghi', 'Pomodoro, mozzarella, prosciutto cotto, funghi', 11.5, 'https://picsum.photos/id/1023/200/300', '2023-11-09 15:45:00');
 
 
+INSERT INTO ingredients(nome) VALUES('Pomodoro');
+INSERT INTO ingredients(nome) VALUES('Mozzarella');
+INSERT INTO ingredients(nome) VALUES('Basilico');
+INSERT INTO ingredients(nome) VALUES('Aglio');
+INSERT INTO ingredients(nome) VALUES('Origano');
+INSERT INTO ingredients(nome) VALUES('Funghi');
+INSERT INTO ingredients(nome) VALUES('Prosciutto');
+INSERT INTO ingredients(nome) VALUES('Salame Piccante');
+INSERT INTO ingredients(nome) VALUES('Gorgonzola');
+INSERT INTO ingredients(nome) VALUES('Parmigiano');
+INSERT INTO ingredients(nome) VALUES('Pecorino');
+INSERT INTO ingredients(nome) VALUES('Verdure Grigliate');
+INSERT INTO ingredients(nome) VALUES('Funghi Champignon');
+INSERT INTO ingredients(nome) VALUES('Acciughe');
+INSERT INTO ingredients(nome) VALUES('Mozzarella di Bufala');
+INSERT INTO ingredients(nome) VALUES('Prosciutto Cotto');
+
+-- Margherita: Pomodoro, Mozzarella, Basilico
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (1, 1); -- Pomodoro
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (1, 2); -- Mozzarella
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (1, 3); -- Basilico
+
+-- Marinara: Pomodoro, Aglio, Origano
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (2, 1); -- Pomodoro
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (2, 4); -- Aglio
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (2, 5); -- Origano
+
+-- Quattro Stagioni: Pomodoro, Mozzarella, Funghi, Prosciutto
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (3, 1); -- Pomodoro
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (3, 2); -- Mozzarella
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (3, 6); -- Funghi
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (3, 7); -- Prosciutto
+
+-- Diavola: Pomodoro, Mozzarella, Salame Piccante
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (4, 1); -- Pomodoro
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (4, 2); -- Mozzarella
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (4, 8); -- Salame Piccante
+
+-- Quattro Formaggi: Mozzarella, Gorgonzola, Parmigiano, Pecorino
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (5, 2); -- Mozzarella
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (5, 9); -- Gorgonzola
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (5, 10); -- Parmigiano
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (5, 11); -- Pecorino
+
+-- Ortolana: Pomodoro, Mozzarella, Verdure Grigliate
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (6, 1); -- Pomodoro
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (6, 2); -- Mozzarella
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (6, 12); -- Verdure Grigliate
+
+-- Funghi: Pomodoro, Mozzarella, Funghi Champignon
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (7, 1); -- Pomodoro
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (7, 2); -- Mozzarella
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (7, 13); -- Funghi Champignon
+
+-- Napoli: Pomodoro, Mozzarella, Acciughe
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (8, 1); -- Pomodoro
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (8, 2); -- Mozzarella
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (8, 14); -- Acciughe
+
+-- Bufalina: Pomodoro, Mozzarella di Bufala, Basilico
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (9, 1); -- Pomodoro
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (9, 15); -- Mozzarella di Bufala
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (9, 3); -- Basilico
+
+-- Prosciutto e Funghi: Pomodoro, Mozzarella, Prosciutto Cotto, Funghi
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (10, 1); -- Pomodoro
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (10, 2); -- Mozzarella
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (10, 16); -- Prosciutto Cotto
+INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (10, 6); -- Funghi

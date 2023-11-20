@@ -62,30 +62,53 @@
                             
                         <a class="showEdit btn btn-primary" th:href="@{/pizzas/edit/{id}(id=*{id})}" title="edit">
                             Modifica</a>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal">
-                                Elimina
+<!--                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal${pizza.id}">-->
+<!--                                Elimina-->
+<!--                        </button>-->
+<!--                        &lt;!&ndash; Modale di conferma eliminazione &ndash;&gt;-->
+<!--                        <div class="modal fade" id="deleteConfirmationModal${pizza.id}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">-->
+<!--                            <div class="modal-dialog">-->
+<!--                                <div class="modal-content bg-dark text-white">-->
+<!--                                    <div class="modal-header">-->
+<!--                                        <h5 class="modal-title" id="deleteModalLabel">Conferma Eliminazione</h5>-->
+<!--                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--                                    </div>-->
+<!--                                    <div class="modal-body">-->
+<!--                                        Sei sicuro di voler eliminare la pizza <span th:text="${pizza.nome}">NomePizza</span>?-->
+<!--                                    </div>-->
+<!--                                    <div class="modal-footer">-->
+<!--                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>-->
+<!--                                        <form method="POST"-->
+<!--                                              th:action="@{/pizzas/delete/{id}(id=*{id})}">-->
+<!--                                            <button type="submit" class="btn btn-primary color-danger">Elimina</button>-->
+<!--                                        </form>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" th:data-bs-target="|#exampleModal_*{id}|">
+                            Cancella
                         </button>
-                        <!-- Modale di conferma eliminazione -->
-                        <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                        
+                        <!-- Modal -->
+                        <div class="modal fade" th:id="|exampleModal_*{id}|" tabindex="-1" th:aria-labelledby="|exampleModalLabel_*{id}|" aria-hidden="true">
                             <div class="modal-dialog">
-                                <div class="modal-content bg-dark text-white">
+                                <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="deleteModalLabel">Conferma Eliminazione</h5>
-                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <h1 class="modal-title fs-5" th:id="|exampleModalLabel_*{id}|">Conferma Eliminazione</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        Sei sicuro di voler eliminare la pizza <span th:text="${pizza.nome}">NomePizza</span>?
+                                        Sei sicuro di voler eliminare la pizza [[*{id}]] selezionata? L'operazione è irreversibile!
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-                                        <form method="POST"
-                                              th:action="@{/offerte/delete/{id}(id=*{id})}">
-                                            <button type="submit" class="btn btn-primary color-danger">Elimina</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                                        <form method="POST" th:action="@{/pizzas/delete/{id}(id=*{id})}">
+                                            <button type="submit" class="btn btn-danger">Cancella</button>
                                         </form>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                        
                     </div>
                 </td>

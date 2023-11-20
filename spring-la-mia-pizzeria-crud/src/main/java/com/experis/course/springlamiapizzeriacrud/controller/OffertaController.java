@@ -74,7 +74,7 @@ public class OffertaController {
             //cancello l'offerta
             OffertaSpeciale offertaSpecialeToDelete = offertaService.getOfferta(id);
             offertaService.deleteOffer(offertaSpecialeToDelete);
-
+            //redirect
             redirectAttributes.addFlashAttribute("message", "Offerta Eliminata!");
             return "redirect:/pizzas/show/" + offertaSpecialeToDelete.getPizza().getId();
         } catch (OffertaNotFoundException e) {

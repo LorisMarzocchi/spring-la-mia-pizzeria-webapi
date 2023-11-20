@@ -6,8 +6,8 @@
 <nav th:replace="fragments/navbar :: topNavbar('pizzas')"></nav>
 <div class="container">
     <h1 th:text="${isEdit ? 'Edit Offerta Speciale' : 'Create Offerta Speciale'}"></h1>
-    <h2 class="text-muted"
-        th:text="${offertaSpeciale.pizza.nome} ? offertaSpeciale.pizza.nome : 'Nome Pizza non disponibile'"></h2>
+    <!--    <h2 class="text-muted"-->
+    <!--        th:text="${offertaSpeciale.pizza.nome} ? offertaSpeciale.pizza.nome : 'Nome Pizza non disponibile'"></h2>-->
     <h2 th:text="${offertaSpeciale != null && offertaSpeciale.pizza != null ? offertaSpeciale.pizza.nome : 'Nome Pizza non disponibile'}"></h2>
     <hr>
     <form
