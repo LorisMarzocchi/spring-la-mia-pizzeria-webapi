@@ -20,15 +20,25 @@
     <section class="mb-5">
         <ul class="list-group list-group-flush">
             <li
-                    class="list-group-item"
-                    th:each="ingredient : ${ingredients}">
-                <span th:text="${ingredient.nome}"></span>
-                <form th:action="@{/ingredients/delete}" method="post">
+                    class="list-group-item bg-dark text-light"
+                    th:each="ingredient : ${ingredientList}">
+                <span th:text="${ingredient.nome}">
+                </span>
+                <form th:action="@{/ingredients/delete}" class="ms-5 d-inline" method="post">
                     <input type="hidden" name="id" th:value="${ingredient.id}"/>
                     <button class="btn btn-danger btn-sm" type="submit">Elimina</button>
                 </form>
             </li>
         </ul>
     </section>
+    <!--    <div class="col-4">-->
+    <!--        <h1>Ingredienti</h1>-->
+    <!--        <hr>-->
+    <!--        -->
+    <!--        <ul th:if="*{ingredients.size() > 0}">-->
+    <!--            <li th:each="ingredient : *{ingredients}" th:text="${ingredient.nome}"></li>-->
+    <!--        </ul>-->
+    <!--        <div th:unless="*{ingredients.size() > 0}" class="alert alert-info">La lista è vuota</div>-->
+    <!--    </div>-->
 </div>
 </body>

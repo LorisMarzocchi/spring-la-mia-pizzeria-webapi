@@ -18,7 +18,7 @@ INSERT INTO pizzas (nome, descrizione, prezzo, url_image, created_at) VALUES('Bu
 
 INSERT INTO pizzas (nome, descrizione, prezzo, url_image, created_at) VALUES('Prosciutto e Funghi', 'Pomodoro, mozzarella, prosciutto cotto, funghi', 11.5, 'https://picsum.photos/id/1023/200/300', '2023-11-09 15:45:00');
 
-
+-- Ingredients
 INSERT INTO ingredients(nome) VALUES('Pomodoro');
 INSERT INTO ingredients(nome) VALUES('Mozzarella');
 INSERT INTO ingredients(nome) VALUES('Basilico');
@@ -88,3 +88,12 @@ INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (10, 1); -- Pom
 INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (10, 2); -- Mozzarella
 INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (10, 16); -- Prosciutto Cotto
 INSERT INTO pizzas_ingredients (pizza_id, ingredients_id) VALUES (10, 6); -- Funghi
+
+INSERT INTO roles (id, nome) VALUES(1, 'ADMIN');
+INSERT INTO roles (id, nome) VALUES(2, 'USER');
+INSERT INTO users (email, first_name, last_name, registered_at, password) VALUES('john@email.com', 'John', 'Doe', '2023-11-20 10:35', '{noop}john');
+INSERT INTO users (email, first_name, last_name, registered_at, password) VALUES('jane@email.com', 'Jane', 'Smith', '2023-11-20 10:35','{noop}jane');
+
+INSERT INTO users_roles (user_id, roles_id) VALUES(1, 1);
+--INSERT INTO users_roles (user_id, roles_id) VALUES(1, 2);
+INSERT INTO users_roles (user_id, roles_id) VALUES(2, 2);

@@ -15,6 +15,9 @@ public class Ingredient {
     @Column(nullable = false, unique = true)
     @NotNull
     private String nome;
+//    @ManyToMany(mappedBy = "ingredients")
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+//    private List<Pizza> pizzas = new ArrayList<>();
 
     public Integer getId() {
         return id;

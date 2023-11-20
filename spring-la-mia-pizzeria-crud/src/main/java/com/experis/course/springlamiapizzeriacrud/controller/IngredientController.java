@@ -2,6 +2,7 @@ package com.experis.course.springlamiapizzeriacrud.controller;
 
 import com.experis.course.springlamiapizzeriacrud.exception.IngredientNameUniqueException;
 import com.experis.course.springlamiapizzeriacrud.model.Ingredient;
+import com.experis.course.springlamiapizzeriacrud.repository.IngredientRepository;
 import com.experis.course.springlamiapizzeriacrud.service.IngredientService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ public class IngredientController {
 
     @Autowired
     IngredientService ingredientService;
+    @Autowired
+    IngredientRepository ingredientRepository;
 
     @GetMapping
     public String index(Model model) {
@@ -49,7 +52,15 @@ public class IngredientController {
                     "A ingredients with name " + e.getMessage() + " already exists");
         }
     }
+
 }
+//    @PostMapping("/delete")
+//    public String delete(@RequestParam("id") Integer id) {
+//        ingredientRepository.deleteById(id);
+//        return "redirect:/ingredients";
+//    }
+
+
 //@Controller
 //@RequestMapping("/ingredients")
 //public class IngredientController {
@@ -79,10 +90,6 @@ public class IngredientController {
 //    }
 //
 //    // Metodo che gestisce la richiesta di eliminazione
-//    @PostMapping("/delete")
-//    public String delete(@RequestParam("id") Integer id) {
-//        ingredientRepository.deleteById(id);
-//        return "redirect:/ingredients";
-//    }
+
 //
 //}
