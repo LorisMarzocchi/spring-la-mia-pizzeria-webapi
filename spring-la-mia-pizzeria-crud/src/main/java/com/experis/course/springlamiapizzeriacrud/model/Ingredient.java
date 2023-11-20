@@ -1,8 +1,11 @@
 package com.experis.course.springlamiapizzeriacrud.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "ingredients")
@@ -13,14 +16,25 @@ public class Ingredient {
     private Integer id;
     @Size(max = 50)
     @Column(nullable = false, unique = true)
-    @NotNull
+    @NotBlank
     private String nome;
-//    @ManyToMany(mappedBy = "ingredients")
-//    @OnDelete(action = OnDeleteAction.CASCADE)
-//    private List<Pizza> pizzas = new ArrayList<>();
+    @ManyToMany(mappedBy = "ingredients")
+    private List<Pizza> pizzas = new ArrayList<>();
 
     public Integer getId() {
         return id;
+    }
+
+    public List<Pizza> getPizzas() {
+        return pizzas;
+    }
+
+    public void setPizzas(List<Pizza> pizzas) {
+        this.pizzas = pizzas;
+    }
+
+    public Integer getId(Integer id) {
+        return this.id;
     }
 
     public void setId(Integer id) {

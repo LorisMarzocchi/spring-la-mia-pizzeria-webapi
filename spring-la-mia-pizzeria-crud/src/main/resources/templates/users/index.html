@@ -1,10 +1,22 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:insert="fragments/resources :: headResources('Users List')"></head>
+<head th:insert="~{fragments/resources :: headResources('Users List')}"></head>
 <body>
-<nav th:replace="fragments/navbar :: topNavbar('users')"></nav>
+<nav th:replace="~{fragments/navbar :: topNavbar('users')}"></nav>
 <div class="container">
     <h1>Users</h1>
+    <div>
+        <ul>
+            <li th:each="user : *{users}"
+                th:text=" |Utenti registrati con ruolo: |+ ${user.roles[0].nome + ' - ' +user.firstName} + ' ' + ${user.lastName}">
+                User
+                registrati:
+            </li>
+        </ul>
+    </div>
+    <!--    <div th:if="${users.isEmpty()}">-->
+    <!--        Nessun utente registrato.-->
+    <!--    </div>-->
 </div>
 </body>
 </html>

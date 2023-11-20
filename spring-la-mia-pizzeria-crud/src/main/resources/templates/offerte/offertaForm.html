@@ -3,7 +3,7 @@
 <head
         th:insert="~{/fragments/resources :: headResources(${isEdit ? 'Edit Offer' : 'Create Offer'})}"></head>
 <body>
-<nav th:replace="fragments/navbar :: topNavbar('pizzas')"></nav>
+<nav th:replace="~{fragments/navbar :: topNavbar('pizzas')}"></nav>
 <div class="container">
     <h1 th:text="${isEdit ? 'Edit Offerta Speciale' : 'Create Offerta Speciale'}"></h1>
     <!--    <h2 class="text-muted"-->

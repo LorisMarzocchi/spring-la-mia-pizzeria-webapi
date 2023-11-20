@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:insert="~{/fragments/resources :: headResources('Ingredients')}"></head>
 <body>
-<nav th:replace="~{fragments/navbar :: topNavbar('ingredients')}"></nav>
+<nav th:replace="~{fragments/navbar :: topNavbar('ingredienti')}"></nav>
 <div class="container">
     <h1 class="text-danger fw-bolder text-decoration-underline mt-4">Ingredienti</h1>
     <hr>
@@ -24,7 +24,7 @@
                     th:each="ingredient : ${ingredientList}">
                 <span th:text="${ingredient.nome}">
                 </span>
-                <form th:action="@{/ingredients/delete}" class="ms-5 d-inline" method="post">
+                <form th:action="@{/ingredients/delete/{id}(id=${ingredient.id})}" class="ms-5 d-inline" method="post">
                     <input type="hidden" name="id" th:value="${ingredient.id}"/>
                     <button class="btn btn-danger btn-sm" type="submit">Elimina</button>
                 </form>

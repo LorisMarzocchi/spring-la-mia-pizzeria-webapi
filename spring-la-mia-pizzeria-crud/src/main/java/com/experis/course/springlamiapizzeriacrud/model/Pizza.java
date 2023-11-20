@@ -39,8 +39,15 @@ public class Pizza {
 
     @OneToMany(mappedBy = "pizza", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<OffertaSpeciale> offertaSpeciale = new ArrayList<>();
+
     @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "pizzas_ingredients",
+            joinColumns = @JoinColumn(name = "pizza_id"),
+            inverseJoinColumns = @JoinColumn(name = "ingredients_id")
+    )
     private List<Ingredient> ingredients = new ArrayList<>();
+//    private Set<Ingredient> ingredients = new HashSet<>();
 
     public List<Ingredient> getIngredients() {
         return ingredients;

@@ -17,7 +17,7 @@
                        th:href="@{/pizzas}">Home</a>
                 </li>
                 <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
-                    <a class="nav-link" th:classAppend="${area == 'user' ? 'active' : ''}"
+                    <a class="nav-link" th:classAppend="${area == 'users' ? 'active' : ''}"
                        th:href="@{/users}">User</a>
                 </li>
                 <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
@@ -26,6 +26,10 @@
                 </li>
             
             </ul>
+            <div class="ms-3 mt-2 text-danger">
+                Ciao <span sec:authentication="name"></span>
+                <a th:href="@{/logout}" class="ms-5 btn btn-primary">Logout</a>
+            </div>
         </div>
     </div>
 </nav>
