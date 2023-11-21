@@ -8,126 +8,159 @@
         <span class="text-light" th:text="${deleteMessage}"></span>
         <button type="button" class="btn-close custom-alert-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-    </div>
+</div>
 <div th:replace="~{fragments/components :: message}"></div>
-    <div class="d-flex mb-5 container align-items-center justify-content-between">
-        <h1>Lista pizze</h1>
-        
-        
-        <form th:action="@{/pizzas}" method="GET">
-            <div class="input-group">
-                <!-- input precaricato leggendo il parametro search della request -->
-                <input
-                        type="text"
-                        placeholder="Search by name"
-                        class="form-control" name="search"
-                        th:value="${param.search}"
-                >
-                <input type="number" class="form-control ms-2 rounded-2" placeholder="Max price" name="searchPrezzo"
-                       th:value="${param.searchPrezzo}">
-                <button class="btn btn-primary" type="submit">Search</button>
-            </div>
-        
-        </form>
-    </div>
-    <div class="text-center" sec:authorize="hasAuthority('ADMIN')">
-        <a class="btn btn-primary my-5" th:href="@{/pizzas/create}" title="create">Aggiungi Nuova Pizza</a>
+<div class="d-flex mb-5 container align-items-center justify-content-between">
+    <h1>Lista pizze</h1>
     
-    </div>
-    <div th:if="${pizzaList.size() > 0}">
-        <table class="table mb-4 table-dark table-hover">
-            <thead class="">
-            <tr>
-                <th scope="col">Nome</th>
-                <th scope="col">Descrizione</th>
-                <th scope="col">Immagine</th>
-                <th scope="col">Prezzo</th>
-                <th scope="col">details</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="pizza : ${pizzaList}" th:object="${pizza}">
-                <td th:text="*{nome}"></td>
-                <td th:text="*{descrizione}"></td>
-                <td>
-                    <img class="imgList" th:src="*{urlImage}" alt="">
-                </td>
-                <td th:text="*{prezzo}"></td>
-                <td>
-                    <div class="d-flex justify-content-around">
+    
+    <form th:action="@{/pizzas}" method="GET">
+        <div class="input-group">
+            <!-- input precaricato leggendo il parametro search della request -->
+            <input
+                    type="text"
+                    placeholder="Search by name"
+                    class="form-control" name="search"
+                    th:value="${param.search}"
+            >
+            <input type="number" class="form-control ms-2 rounded-2" placeholder="Max price" name="searchPrezzo"
+                   th:value="${param.searchPrezzo}">
+            <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+    
+    </form>
+</div>
+<!--Paginazione  cambiato ${pizzaList.size() > 0} in  ${pizzaPage.totalPages > 1}-->
+<div th:if="${pizzaPage.totalPages > 1}" class="d-flex justify-content-center mt-4">
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <li th:classappend="${pizzaPage.first ? 'disabled' : ''}" class="page-item">
+                <a class="page-link"
+                   th:href="@{/pizzas(page=${pizzaPage.number - 1}, size=${pizzaPage.size}, search=${param.search}, searchPrezzo=${param.searchPrezzo})}"
+                   aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li th:each="pageNum : ${#numbers.sequence(0, pizzaPage.totalPages - 1)}"
+                th:classappend="${pageNum == pizzaPage.number ? 'active' : ''}" class="page-item">
+                <a class="page-link"
+                   th:href="@{/pizzas(page=${pageNum}, size=${pizzaPage.size}, search=${param.search}, searchPrezzo=${param.searchPrezzo})}"
+                   th:text="${pageNum + 1}">1</a>
+            </li>
+            <li th:classappend="${pizzaPage.last ? 'disabled' : ''}" class="page-item">
+                <a class="page-link"
+                   th:href="@{/pizzas(page=${pizzaPage.number + 1}, size=${pizzaPage.size}, search=${param.search}, searchPrezzo=${param.searchPrezzo})}"
+                   aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+<!--Fine Paginazione-->
+<div class="text-center" sec:authorize="hasAuthority('ADMIN')">
+    <a class="btn btn-primary my-5" th:href="@{/pizzas/create}" title="create">Aggiungi Nuova Pizza</a>
+
+</div>
+<div th:if="${pizzaPage.totalPages > 0}">
+    <table class="table mb-4 table-dark table-hover">
+        <thead class="">
+        <tr>
+            <th scope="col">Nome</th>
+            <th scope="col">Descrizione</th>
+            <th scope="col">Immagine</th>
+            <th scope="col">Prezzo</th>
+            <th scope="col">details</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="pizza : ${pizzaPage}" th:object="${pizza}">
+            <td th:text="*{nome}"></td>
+            <td th:text="*{descrizione}"></td>
+            <td>
+                <img class="imgList" th:src="*{urlImage}" alt="">
+            </td>
+            <td th:text="*{prezzo}"></td>
+            <td>
+                <div class="d-flex justify-content-around">
                     
-                        
-                        <a class="showDetail btn btn-primary " th:href="@{/pizzas/show/{id}(id=*{id})}" title="details">
-                            <i class="me-1 fa-solid fa-pizza-slice"></i>Dettagli</a>
-                            
-                        <a class="showEdit btn btn-primary"
-                           th:href="@{/pizzas/edit/{id}(id=*{id})}"
-                           title="edit"
-                           sec:authorize="hasAuthority('ADMIN')"
-                        >
-                            Modifica</a>
-<!--                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal${pizza.id}">-->
-<!--                                Elimina-->
-<!--                        </button>-->
-<!--                        &lt;!&ndash; Modale di conferma eliminazione &ndash;&gt;-->
-<!--                        <div class="modal fade" id="deleteConfirmationModal${pizza.id}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">-->
-<!--                            <div class="modal-dialog">-->
-<!--                                <div class="modal-content bg-dark text-white">-->
-<!--                                    <div class="modal-header">-->
-<!--                                        <h5 class="modal-title" id="deleteModalLabel">Conferma Eliminazione</h5>-->
-<!--                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>-->
-<!--                                    </div>-->
-<!--                                    <div class="modal-body">-->
-<!--                                        Sei sicuro di voler eliminare la pizza <span th:text="${pizza.nome}">NomePizza</span>?-->
-<!--                                    </div>-->
-<!--                                    <div class="modal-footer">-->
-<!--                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>-->
-<!--                                        <form method="POST"-->
-<!--                                              th:action="@{/pizzas/delete/{id}(id=*{id})}">-->
-<!--                                            <button type="submit" class="btn btn-primary color-danger">Elimina</button>-->
-<!--                                        </form>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-                        <button
-                                sec:authorize="hasAuthority('ADMIN')"
-                                type="button" class="btn btn-danger"
-                                data-bs-toggle="modal" th:data-bs-target="|#exampleModal_*{id}|"
-                        >
-                            Cancella
-                        </button>
-                        
-                        <!-- Modal -->
-                        <div class="modal fade" th:id="|exampleModal_*{id}|" tabindex="-1" th:aria-labelledby="|exampleModalLabel_*{id}|" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content bg-dark text-white">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" th:id="|exampleModalLabel_*{id}|">Conferma Eliminazione</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Sei sicuro di voler eliminare la pizza con id: [[*{id}]] e nome: <span th:text="${pizza.nome}">NomePizza</span>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                                        <form method="POST" th:action="@{/pizzas/delete/{id}(id=*{id})}">
-                                            <button type="submit" class="btn btn-danger">Cancella</button>
-                                        </form>
-                                    </div>
+                    
+                    <a class="showDetail btn btn-primary " th:href="@{/pizzas/show/{id}(id=*{id})}" title="details">
+                        <i class="me-1 fa-solid fa-pizza-slice"></i>Dettagli</a>
+                    
+                    <a class="showEdit btn btn-primary"
+                       th:href="@{/pizzas/edit/{id}(id=*{id})}"
+                       title="edit"
+                       sec:authorize="hasAuthority('ADMIN')"
+                    >
+                        Modifica</a>
+                    <!--                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal${pizza.id}">-->
+                    <!--                                Elimina-->
+                    <!--                        </button>-->
+                    <!--                        &lt;!&ndash; Modale di conferma eliminazione &ndash;&gt;-->
+                    <!--                        <div class="modal fade" id="deleteConfirmationModal${pizza.id}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">-->
+                    <!--                            <div class="modal-dialog">-->
+                    <!--                                <div class="modal-content bg-dark text-white">-->
+                    <!--                                    <div class="modal-header">-->
+                    <!--                                        <h5 class="modal-title" id="deleteModalLabel">Conferma Eliminazione</h5>-->
+                    <!--                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>-->
+                    <!--                                    </div>-->
+                    <!--                                    <div class="modal-body">-->
+                    <!--                                        Sei sicuro di voler eliminare la pizza <span th:text="${pizza.nome}">NomePizza</span>?-->
+                    <!--                                    </div>-->
+                    <!--                                    <div class="modal-footer">-->
+                    <!--                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>-->
+                    <!--                                        <form method="POST"-->
+                    <!--                                              th:action="@{/pizzas/delete/{id}(id=*{id})}">-->
+                    <!--                                            <button type="submit" class="btn btn-primary color-danger">Elimina</button>-->
+                    <!--                                        </form>-->
+                    <!--                                    </div>-->
+                    <!--                                </div>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <button
+                            sec:authorize="hasAuthority('ADMIN')"
+                            type="button" class="btn btn-danger"
+                            data-bs-toggle="modal" th:data-bs-target="|#exampleModal_*{id}|"
+                    >
+                        Cancella
+                    </button>
+                    
+                    <!-- Modal -->
+                    <div class="modal fade" th:id="|exampleModal_*{id}|" tabindex="-1"
+                         th:aria-labelledby="|exampleModalLabel_*{id}|" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content bg-dark text-white">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" th:id="|exampleModalLabel_*{id}|">Conferma
+                                        Eliminazione</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Sei sicuro di voler eliminare la pizza con id: [[*{id}]] e nome: <span
+                                        th:text="${pizza.nome}">NomePizza</span>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi
+                                    </button>
+                                    <form method="POST" th:action="@{/pizzas/delete/{id}(id=*{id})}">
+                                        <button type="submit" class="btn btn-danger">Cancella</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    
-    
-    </div>
-    <div th:unless="${pizzaList.size() > 0}">No results</div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+
 </div>
+<div th:unless="${pizzaPage.totalPages > 0}">No results</div>
+
 
 </body>
 </html>

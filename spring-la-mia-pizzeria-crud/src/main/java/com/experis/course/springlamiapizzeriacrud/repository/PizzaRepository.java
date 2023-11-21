@@ -1,16 +1,17 @@
 package com.experis.course.springlamiapizzeriacrud.repository;
 
 import com.experis.course.springlamiapizzeriacrud.model.Pizza;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 public interface PizzaRepository extends JpaRepository<Pizza, Integer> {
-    List<Pizza> findByNomeContainingIgnoreCase(String nomeKeyword);
+    Page<Pizza> findByNomeContainingIgnoreCase(String nomeKeyword, Pageable pageable);
 
-    List<Pizza> findByPrezzoLessThanEqual(BigDecimal nomeKeyword);
-    
-    List<Pizza> findByNomeContainingIgnoreCaseAndPrezzoLessThanEqual(String nomeKeyword, BigDecimal maxPrezzo);
+    Page<Pizza> findByPrezzoLessThanEqual(BigDecimal nomeKeyword, Pageable pageable);
+
+    Page<Pizza> findByNomeContainingIgnoreCaseAndPrezzoLessThanEqual(String nomeKeyword, BigDecimal maxPrezzo, Pageable pageable);
 
 }

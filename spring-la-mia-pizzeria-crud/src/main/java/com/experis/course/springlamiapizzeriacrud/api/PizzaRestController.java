@@ -5,12 +5,14 @@ import com.experis.course.springlamiapizzeriacrud.model.Pizza;
 import com.experis.course.springlamiapizzeriacrud.service.PizzaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -22,10 +24,14 @@ public class PizzaRestController {
     @Autowired
     private PizzaService pizzaService;
 
+    // index per lista paginata (Pageable in PizzaService e PizzaRepository )
     @GetMapping
-    public List<Pizza> index(@RequestParam Optional<String> search, @RequestParam Optional<BigDecimal> searchPrezzo) {
-
-        return pizzaService.getPizzaList(search, searchPrezzo);
+    public Page<Pizza> index(@RequestParam Optional<String> search,
+                             @RequestParam Optional<BigDecimal> searchPrezzo,
+                             @RequestParam(name = "size", defaultValue = "2") Integer size,
+                             @RequestParam(name = "page", defaultValue = "0") Integer page) {
+        Pageable pageable = PageRequest.of(page, size);
+        return pizzaService.getPizzaList(search, searchPrezzo, pageable);
 
     }
 
@@ -70,13 +76,13 @@ public class PizzaRestController {
     }
 
     // endpoint di test per lista paginata
-//    @GetMapping("/page")
-//    public Page<Book> pagedIndex(
-//            @RequestParam(name = "size", defaultValue = "2") Integer size,
-//            @RequestParam(name = "page", defaultValue = "0") Integer page) {
-//
-//        return bookService.getPage(PageRequest.of(page, size));
-//    }
+    @GetMapping("/page")
+    public Page<Pizza> pagedIndex(
+            @RequestParam(name = "size", defaultValue = "2") Integer size,
+            @RequestParam(name = "page", defaultValue = "0") Integer page) {
+
+        return pizzaService.getPage(PageRequest.of(page, size));
+    }
 //
 //    @GetMapping("/page/v2")
 //    public Page<Book> pagedIndexV2(@PageableDefault(page = 0, size = 2) Pageable pageable) {

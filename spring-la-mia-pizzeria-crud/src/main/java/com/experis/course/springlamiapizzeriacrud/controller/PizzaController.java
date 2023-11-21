@@ -7,6 +7,9 @@ import com.experis.course.springlamiapizzeriacrud.service.IngredientService;
 import com.experis.course.springlamiapizzeriacrud.service.PizzaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,12 +33,26 @@ public class PizzaController {
 
 
     //    }
+//    @GetMapping
+//    public String index(@RequestParam Optional<String> search, @RequestParam Optional<BigDecimal> searchPrezzo, Model model) {
+////        List<Pizza> pizzaList = pizzaService.getPizzaList(search, searchPrezzo);
+//        model.addAttribute("pizzaList", pizzaService.getPizzaList(search, searchPrezzo));
+//        return "pizzas/pizzaList";
+//    }
+
+    // Cambiato tipo da List a Page in JPA Repo, Service e Api
     @GetMapping
-    public String index(@RequestParam Optional<String> search, @RequestParam Optional<BigDecimal> searchPrezzo, Model model) {
-//        List<Pizza> pizzaList = pizzaService.getPizzaList(search, searchPrezzo);
-        model.addAttribute("pizzaList", pizzaService.getPizzaList(search, searchPrezzo));
+    public String index(@RequestParam Optional<String> search,
+                        @RequestParam Optional<BigDecimal> searchPrezzo,
+                        @RequestParam(defaultValue = "5") int size,
+                        @RequestParam(defaultValue = "0") int page,
+                        Model model) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Pizza> pizzaPage = pizzaService.getPizzaList(search, searchPrezzo, pageable);
+        model.addAttribute("pizzaPage", pizzaPage);
         return "pizzas/pizzaList";
     }
+
     //    public String index(
 //            @RequestParam Optional<String> search,
 //            @RequestParam Optional<BigDecimal> searchPrezzo,

@@ -4,6 +4,8 @@ import com.experis.course.springlamiapizzeriacrud.exception.PizzaNotFoundExcepti
 import com.experis.course.springlamiapizzeriacrud.model.Pizza;
 import com.experis.course.springlamiapizzeriacrud.repository.PizzaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -20,21 +22,22 @@ public class PizzaService {
     }
 
     //metodo per la lista di tutte le pizze
-    public List<Pizza> getPizzaList(Optional<String> search, Optional<BigDecimal> searchPrezzo) {
+    public Page<Pizza> getPizzaList(Optional<String> search, Optional<BigDecimal> searchPrezzo, Pageable pageable) {
 //        List<Pizza> pizzaList;
         if (search.isPresent() && searchPrezzo.isPresent()) {
-            return pizzaRepository.findByNomeContainingIgnoreCaseAndPrezzoLessThanEqual(search.get(), searchPrezzo.get());
+            return pizzaRepository.findByNomeContainingIgnoreCaseAndPrezzoLessThanEqual(search.get(), searchPrezzo.get(), pageable);
         } else if (search.isPresent()) {
             // Applica solo il filtro per il nome
-            return pizzaRepository.findByNomeContainingIgnoreCase(search.get());
+            return pizzaRepository.findByNomeContainingIgnoreCase(search.get(), pageable);
         } else if (searchPrezzo.isPresent()) {
-            return pizzaRepository.findByPrezzoLessThanEqual(searchPrezzo.get());
+            return pizzaRepository.findByPrezzoLessThanEqual(searchPrezzo.get(), pageable);
         } else {
-            return pizzaRepository.findAll();
+            return pizzaRepository.findAll(pageable);
         }
     }
 
     // Metodo per ottenere una pizza per ID
+    // metodo che restituisce una pizza presa per id, se non lo trova solleva un'eccezione
     public Pizza getPizzaById(Integer id) throws PizzaNotFoundException {
         Optional<Pizza> result = pizzaRepository.findById(id);
         if (result.isPresent()) {
@@ -65,6 +68,7 @@ public class PizzaService {
 //            return pizzaRepository.save(existingPizza);
 //        }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pizza with id " + id + " not found"));
 //    }
+    // metodo per modificare una pizza con un id
     public Pizza updatePizza(Pizza pizza) {
         Pizza pizzaToEdit = getPizzaById(pizza.getId());
         pizzaToEdit.setNome(pizza.getNome());
@@ -80,7 +84,7 @@ public class PizzaService {
     }
 
     // metodo che prende in ingresso un Pageable e restituisce la Page di libri
-//    public Page<Book> getPage(Pageable pageable) {
-//        return bookRepository.findAll(pageable);
-//    }
+    public Page<Pizza> getPage(Pageable pageable) {
+        return pizzaRepository.findAll(pageable);
+    }
 }

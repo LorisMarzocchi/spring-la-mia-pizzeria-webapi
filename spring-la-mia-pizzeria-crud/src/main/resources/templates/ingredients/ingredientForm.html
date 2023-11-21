@@ -15,6 +15,8 @@
             <div class="col-12"
                  th:insert="~{fragments/components :: formField('text', 'Aggiungi nome Ingrediente', 'nome')}"></div>
             <button class="btn btn-primary mt-3" type="submit">Aggiungi alla lista</button>
+            <!--            fragment-->
+            <div th:replace="~{fragments/components :: message}"></div>
         </form>
     </section>
     <section class="mb-5">
@@ -24,7 +26,7 @@
                     th:each="ingredient : ${ingredientList}">
                 <span th:text="${ingredient.nome}">
                 </span>
-                <form th:action="@{/ingredients/delete/{id}(id=${ingredient.id})}" class="ms-5 d-inline" method="post">
+                <form th:action="@{/ingredients/delete/{id}(id=${ingredient.id})}" class="ms-5 d-inline" method="POST">
                     <input type="hidden" name="id" th:value="${ingredient.id}"/>
                     <button class="btn btn-danger btn-sm" type="submit">Elimina</button>
                 </form>
