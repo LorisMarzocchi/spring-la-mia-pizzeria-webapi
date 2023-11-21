@@ -48,6 +48,8 @@ public class SecurityConfiguration {
                 .requestMatchers("/**").permitAll()
                 .and().formLogin()
                 .and().logout();
+        // disabilita token sicurezza
+        http.csrf().disable();
         return http.build();
     }
 }

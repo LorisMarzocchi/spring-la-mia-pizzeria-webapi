@@ -38,6 +38,7 @@ public class Pizza {
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "pizza", orphanRemoval = true, fetch = FetchType.LAZY)
+//    @JsonIgnore
     private List<OffertaSpeciale> offertaSpeciale = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -46,8 +47,10 @@ public class Pizza {
             joinColumns = @JoinColumn(name = "pizza_id"),
             inverseJoinColumns = @JoinColumn(name = "ingredients_id")
     )
+//    @JsonIgnore
     private List<Ingredient> ingredients = new ArrayList<>();
-//    private Set<Ingredient> ingredients = new HashSet<>();
+
+    //    private Set<Ingredient> ingredients = new HashSet<>();
 
     public List<Ingredient> getIngredients() {
         return ingredients;

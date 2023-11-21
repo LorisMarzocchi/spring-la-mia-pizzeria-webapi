@@ -15,6 +15,10 @@ public class PizzaService {
     @Autowired
     private PizzaRepository pizzaRepository;
 
+    public List<Pizza> getPizzaListDue() {
+        return pizzaRepository.findAll();
+    }
+
     //metodo per la lista di tutte le pizze
     public List<Pizza> getPizzaList(Optional<String> search, Optional<BigDecimal> searchPrezzo) {
 //        List<Pizza> pizzaList;
@@ -31,7 +35,7 @@ public class PizzaService {
     }
 
     // Metodo per ottenere una pizza per ID
-    public Pizza getPizzaById(Integer id) {
+    public Pizza getPizzaById(Integer id) throws PizzaNotFoundException {
         Optional<Pizza> result = pizzaRepository.findById(id);
         if (result.isPresent()) {
             return result.get();
@@ -43,6 +47,7 @@ public class PizzaService {
 
 
     public Pizza savePizza(Pizza pizza) {
+        pizza.setId(null);
         try {
             return pizzaRepository.save(pizza);
         } catch (RuntimeException e) {
@@ -73,4 +78,9 @@ public class PizzaService {
     public void deletePizza(Integer id) {
         pizzaRepository.deleteById(id);
     }
+
+    // metodo che prende in ingresso un Pageable e restituisce la Page di libri
+//    public Page<Book> getPage(Pageable pageable) {
+//        return bookRepository.findAll(pageable);
+//    }
 }

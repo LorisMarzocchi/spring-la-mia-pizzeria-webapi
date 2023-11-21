@@ -1,5 +1,6 @@
 package com.experis.course.springlamiapizzeriacrud.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -19,6 +20,7 @@ public class Ingredient {
     @NotBlank
     private String nome;
     @ManyToMany(mappedBy = "ingredients")
+    @JsonIgnore
     private List<Pizza> pizzas = new ArrayList<>();
 
     public Integer getId() {

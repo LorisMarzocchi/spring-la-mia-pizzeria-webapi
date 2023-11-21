@@ -1,5 +1,6 @@
 package com.experis.course.springlamiapizzeriacrud.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -19,6 +20,7 @@ public class OffertaSpeciale {
 
     @NotNull
     @ManyToOne
+    @JsonIgnore
     private Pizza pizza;
 
     public String getTitolo() {
