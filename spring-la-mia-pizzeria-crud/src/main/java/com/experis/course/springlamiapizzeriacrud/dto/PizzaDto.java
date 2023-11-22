@@ -1,22 +1,18 @@
-package com.experis.course.springlamiapizzeriacrud.model;
+package com.experis.course.springlamiapizzeriacrud.dto;
 
+import com.experis.course.springlamiapizzeriacrud.model.Ingredient;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.validator.constraints.URL;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "pizzas")
-public class Pizza {
+public class PizzaDto {
 
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @NotBlank(message = "il nome non puo essere vuoto")
     @Size(min = 5, max = 25, message = "il campo non può essere minore di 5 e maggiore di 25 caratteri")
@@ -34,16 +30,8 @@ public class Pizza {
     @DecimalMax(value = "100.0", message = "Il prezzo non può essere maggiore di 100")
     @Digits(integer = 3, fraction = 2, message = "Il prezzo deve avere al massimo 3 cifre intere e 2 decimali")
     private BigDecimal prezzo;
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-    @Lob
-    @Column(length = 16777215)
-    private byte[] cover;
 
-    @OneToMany(mappedBy = "pizza", orphanRemoval = true, fetch = FetchType.LAZY)
-//    @JsonIgnore
-    private List<OffertaSpeciale> offertaSpeciale = new ArrayList<>();
-
+    private MultipartFile coverFile;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "pizzas_ingredients",
@@ -63,37 +51,12 @@ public class Pizza {
         this.ingredients = ingredients;
     }
 
-    public List<OffertaSpeciale> getOffertaSpeciale() {
-        return offertaSpeciale;
-    }
-
-    public void setOffertaSpeciale(List<OffertaSpeciale> offertaSpeciale) {
-        this.offertaSpeciale = offertaSpeciale;
-    }
-
-    // Getter e Setter image
-    public byte[] getCover() {
-        return cover;
-    }
-
-    public void setCover(byte[] cover) {
-        this.cover = cover;
-    }
-
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 
     public String getNome() {
@@ -127,4 +90,14 @@ public class Pizza {
     public void setPrezzo(BigDecimal prezzo) {
         this.prezzo = prezzo;
     }
+
+    public MultipartFile getCoverFile() {
+        return coverFile;
+    }
+
+    public void setCoverFile(MultipartFile coverFile) {
+        this.coverFile = coverFile;
+    }
+
+
 }

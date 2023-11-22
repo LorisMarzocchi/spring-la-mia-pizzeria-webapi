@@ -48,7 +48,7 @@ public class PizzaService {
         }
     }
 
-
+    // metodo per creare un una nuova pizza
     public Pizza savePizza(Pizza pizza) {
         pizza.setId(null);
         try {
@@ -59,6 +59,38 @@ public class PizzaService {
         }
     }
 
+//    public Pizza savePizza(PizzaDto pizzaDto) throws IOException, PizzaNotFoundException {
+//        // converto il PizzaDto in Pizza
+//        Pizza pizza = convertDtoToPizza(pizzaDto);
+//        // chiamo il metodo che salva sul database
+//        return savePizza(pizza);
+//    }
+
+//    public Pizza convertDtoToPizza(PizzaDto pizzaDto) throws IOException {
+//        Pizza pizza = new Pizza();
+//        pizza.setId(pizzaDto.getId());
+//        pizza.setNome(pizzaDto.getNome());
+//        pizza.setDescrizione(pizzaDto.getDescrizione());
+//        pizza.setUrlImage(pizzaDto.getUrlImage());
+//        pizza.setPrezzo(pizzaDto.getPrezzo());
+//        pizza.setIngredients(pizzaDto.getIngredients());
+//        if (pizzaDto.getCoverFile() != null && !pizzaDto.getCoverFile().isEmpty()) {
+//            byte[] bytes = pizzaDto.getCoverFile().getBytes();
+//            pizza.setCover(bytes);
+//        }
+//        return pizza;
+//
+//    }
+
+//    private static PizzaDto convertPizzaToDto(Pizza pizza) throws IOException {
+//        PizzaDto pizzaDto = new PizzaDto();
+//        pizzaDto.setNome(pizza.getNome());
+//        pizzaDto.setDescrizione(pizza.getDescrizione());
+//        pizzaDto.setUrlImage();
+//
+//    }
+
+
     //    public Pizza updatePizza(Pizza pizza, Integer id) {
 //        return pizzaRepository.findById(id).map(existingPizza -> {
 //            existingPizza.setNome(pizza.getNome());
@@ -68,6 +100,7 @@ public class PizzaService {
 //            return pizzaRepository.save(existingPizza);
 //        }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pizza with id " + id + " not found"));
 //    }
+
     // metodo per modificare una pizza con un id
     public Pizza updatePizza(Pizza pizza) {
         Pizza pizzaToEdit = getPizzaById(pizza.getId());

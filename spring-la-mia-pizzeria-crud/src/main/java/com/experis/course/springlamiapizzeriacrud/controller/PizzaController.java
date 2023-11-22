@@ -1,6 +1,7 @@
 package com.experis.course.springlamiapizzeriacrud.controller;
 
 
+import com.experis.course.springlamiapizzeriacrud.dto.PizzaDto;
 import com.experis.course.springlamiapizzeriacrud.exception.PizzaNotFoundException;
 import com.experis.course.springlamiapizzeriacrud.model.Pizza;
 import com.experis.course.springlamiapizzeriacrud.service.IngredientService;
@@ -106,29 +107,11 @@ public class PizzaController {
 
     @GetMapping("/create")
     public String create(Model model) {
-        model.addAttribute("pizza", new Pizza());
+        model.addAttribute("pizza", new PizzaDto());
         model.addAttribute("ingredientList", indredientService.getAll());
         return "pizzas/pizzaForm";
     }
 
-    //    @PostMapping("/store")
-//    public String store(@Valid @ModelAttribute("pizza") Pizza formPizza, BindingResult bindingResult) {
-//        if (bindingResult.hasErrors()) {
-//            return "pizzas/pizzaForm";
-//        }
-////        SETTO IL TIMESTAMP
-////        formPizza.setCreatedAt(LocalDateTime.now());
-//        Pizza savedPizza = null;
-//        try {
-//            savedPizza = pizzaRepository.save(formPizza);
-//
-//        } catch (RuntimeException e) {
-//            bindingResult.addError(new FieldError("pizza", "nome", formPizza.getNome(), false, null, null, "il nome deve essere unico"));
-//            return "pizzas/pizzaForm";
-//        }
-////        String redirectUrl = "redirect:/pizzas/show" +
-//        return "redirect:/pizzas/show/" + savedPizza.getId();
-//    }
     @PostMapping("/store")
     public String store(@Valid @ModelAttribute("pizza") Pizza formPizza, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
@@ -145,6 +128,28 @@ public class PizzaController {
             return "pizzas/pizzaForm";
         }
     }
+
+//    @PostMapping("/store")
+//    public String store(@Valid @ModelAttribute("pizza") PizzaDto formPizza, BindingResult bindingResult, Model model) {
+//        // Valida i dati
+//        if (bindingResult.hasErrors()) {
+//            // se ci sono errori ricarico il form
+//            model.addAttribute("ingredientList", indredientService.getAll());
+//
+//            return "pizzas/pizzaForm";
+//        }
+//        // salvo su database
+//        try {
+//            Pizza savedPizza = pizzaService.savePizza(formPizza);
+//            return "redirect:/pizzas/show/" + savedPizza.getId();
+//        } catch (RuntimeException e) {
+//            bindingResult.addError(new FieldError("pizza", "nome", e.getMessage(), false, null, null, "Il nome deve essere unico"));
+//            return "pizzas/pizzaForm";
+//        } catch (IOException e) {
+//            bindingResult.addError(new FieldError("pizza", "coverFile", e.getMessage(), false, null, null, "impossibile salvare il file"));
+//            return "pizzas/pizzaForm";
+//        }
+//    }
 
 
     // metodo che mostra la pagina di modifica di un libro

@@ -28,7 +28,7 @@ public class PizzaRestController {
     @GetMapping
     public Page<Pizza> index(@RequestParam Optional<String> search,
                              @RequestParam Optional<BigDecimal> searchPrezzo,
-                             @RequestParam(name = "size", defaultValue = "2") Integer size,
+                             @RequestParam(name = "size", defaultValue = "20") Integer size,
                              @RequestParam(name = "page", defaultValue = "0") Integer page) {
         Pageable pageable = PageRequest.of(page, size);
         return pizzaService.getPizzaList(search, searchPrezzo, pageable);
