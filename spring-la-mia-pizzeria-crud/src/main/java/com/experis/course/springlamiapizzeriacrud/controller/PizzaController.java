@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Optional;
 
@@ -113,7 +114,7 @@ public class PizzaController {
     }
 
     @PostMapping("/store")
-    public String store(@Valid @ModelAttribute("pizza") Pizza formPizza, BindingResult bindingResult, Model model) {
+    public String store(@Valid @ModelAttribute("pizza") PizzaDto formPizza, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("ingredientList", indredientService.getAll());
 
@@ -126,6 +127,10 @@ public class PizzaController {
         } catch (RuntimeException e) {
             bindingResult.addError(new FieldError("pizza", "nome", e.getMessage(), false, null, null, "Il nome deve essere unico"));
             return "pizzas/pizzaForm";
+        } catch (IOException e) {
+            bindingResult.addError(new FieldError("pizza", "covereFile", "impossibile salvare il file"));
+            return "pizzas/pizzaForm";
+
         }
     }
 
@@ -167,11 +172,15 @@ public class PizzaController {
 //        }
 //    }
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable Integer id, Model model) {
-        Pizza pizza = pizzaService.getPizzaById(id);
-        model.addAttribute("pizza", pizza);
-        model.addAttribute("ingredientList", indredientService.getAll());
-        return "pizzas/pizzaForm";
+    public String edit(@PathVariable Integer id, Model model) throws IOException {
+        try {
+            Pizza pizza = pizzaService.getPizzaById(id);
+            model.addAttribute("pizza", pizzaService.getPizzaDtoById(id));
+            model.addAttribute("ingredientList", indredientService.getAll());
+            return "pizzas/pizzaForm";
+        } catch (PizzaNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
 
@@ -203,7 +212,7 @@ public class PizzaController {
 //        }
 //    }
     @PostMapping("/edit/{id}")
-    public String update(@PathVariable Integer id, @Valid @ModelAttribute("pizza") Pizza formPizza, BindingResult bindingResult, Model model) {
+    public String update(@PathVariable Integer id, @Valid @ModelAttribute("pizza") PizzaDto formPizza, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("ingredientList", indredientService.getAll());
             return "pizzas/pizzaForm";
@@ -214,6 +223,9 @@ public class PizzaController {
             return "redirect:/pizzas/show/" + updatedPizza.getId();
         } catch (PizzaNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (IOException e) {
+            bindingResult.addError(new FieldError("pizza", "coverFile", null, false, null, null, "impossibile salvare il file"));
+            return "pizza/pizzaForm";
         }
     }
 

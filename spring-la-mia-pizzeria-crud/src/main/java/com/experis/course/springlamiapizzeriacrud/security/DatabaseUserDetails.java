@@ -20,7 +20,7 @@ public class DatabaseUserDetails implements UserDetails {
     // costruttore che copia da una istanza di User i dati che mi servono
     public DatabaseUserDetails(User user) {
         this.id = user.getId();
-        // per la library il campo univoco username è la email
+        // per la pizzeria il campo univoco username è la email
         this.username = user.getEmail();
         this.password = user.getPassword();
 

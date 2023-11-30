@@ -3,7 +3,6 @@ package com.experis.course.springlamiapizzeriacrud.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.validator.constraints.URL;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -25,10 +24,7 @@ public class Pizza {
     @NotBlank(message = "il campo descrizione non puo essere vuoto")
     @Size(min = 5, max = 255, message = "il campo non può essere minore di 5 maggiore di 255 caratteri")
     private String descrizione;
-    @NotBlank(message = "il campo Url non puo essere vuoto")
-    @Size(min = 5, max = 255, message = "il campo non può essere minore di 5 e maggiore di 255 caratteri")
-    @URL(message = "inserisci un url valido")
-    private String urlImage;
+
     @NotNull(message = "il campo prezzo non puo essere vuoto")
     @DecimalMin(value = "0.01", message = "Il prezzo non può essere inferiore o uguale a 0")
     @DecimalMax(value = "100.0", message = "Il prezzo non può essere maggiore di 100")
@@ -38,6 +34,7 @@ public class Pizza {
     private LocalDateTime createdAt;
     @Lob
     @Column(length = 16777215)
+//    @JsonIgnore
     private byte[] cover;
 
     @OneToMany(mappedBy = "pizza", orphanRemoval = true, fetch = FetchType.LAZY)
@@ -112,13 +109,6 @@ public class Pizza {
         this.descrizione = descrizione;
     }
 
-    public String getUrlImage() {
-        return urlImage;
-    }
-
-    public void setUrlImage(String urlImage) {
-        this.urlImage = urlImage;
-    }
 
     public BigDecimal getPrezzo() {
         return prezzo;

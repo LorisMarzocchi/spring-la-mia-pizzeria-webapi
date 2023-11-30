@@ -1,5 +1,6 @@
 package com.experis.course.springlamiapizzeriacrud.service;
 
+import com.experis.course.springlamiapizzeriacrud.dto.PizzaDto;
 import com.experis.course.springlamiapizzeriacrud.exception.PizzaNotFoundException;
 import com.experis.course.springlamiapizzeriacrud.model.Pizza;
 import com.experis.course.springlamiapizzeriacrud.repository.PizzaRepository;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -59,57 +61,66 @@ public class PizzaService {
         }
     }
 
-//    public Pizza savePizza(PizzaDto pizzaDto) throws IOException, PizzaNotFoundException {
-//        // converto il PizzaDto in Pizza
-//        Pizza pizza = convertDtoToPizza(pizzaDto);
+    //Overload di pizza
+    public Pizza savePizza(PizzaDto pizzaDto) throws IOException, PizzaNotFoundException {
+        try {
+            // converto il PizzaDto in Pizza
+            Pizza pizza = convertDtoToPizza(pizzaDto);
 //        // chiamo il metodo che salva sul database
-//        return savePizza(pizza);
-//    }
+            return savePizza(pizza);
+        } catch (IOException e) {
+            throw new PizzaNotFoundException(e.getMessage());
+        }
+    }
 
-//    public Pizza convertDtoToPizza(PizzaDto pizzaDto) throws IOException {
-//        Pizza pizza = new Pizza();
-//        pizza.setId(pizzaDto.getId());
-//        pizza.setNome(pizzaDto.getNome());
-//        pizza.setDescrizione(pizzaDto.getDescrizione());
-//        pizza.setUrlImage(pizzaDto.getUrlImage());
-//        pizza.setPrezzo(pizzaDto.getPrezzo());
-//        pizza.setIngredients(pizzaDto.getIngredients());
-//        if (pizzaDto.getCoverFile() != null && !pizzaDto.getCoverFile().isEmpty()) {
-//            byte[] bytes = pizzaDto.getCoverFile().getBytes();
-//            pizza.setCover(bytes);
-//        }
-//        return pizza;
-//
-//    }
+    private static Pizza convertDtoToPizza(PizzaDto pizzaDto) throws IOException {
+        Pizza pizza = new Pizza();
+        pizza.setId(pizzaDto.getId());
+        pizza.setNome(pizzaDto.getNome());
+        pizza.setDescrizione(pizzaDto.getDescrizione());
+        pizza.setPrezzo(pizzaDto.getPrezzo());
+        pizza.setIngredients(pizzaDto.getIngredients());
+        pizza.setId(pizzaDto.getId());
+        if (pizzaDto.getCoverFile() != null && !pizzaDto.getCoverFile().isEmpty()) {
+            byte[] bytes = pizzaDto.getCoverFile().getBytes();
+            pizza.setCover(bytes);
+        }
+        return pizza;
 
-//    private static PizzaDto convertPizzaToDto(Pizza pizza) throws IOException {
-//        PizzaDto pizzaDto = new PizzaDto();
-//        pizzaDto.setNome(pizza.getNome());
-//        pizzaDto.setDescrizione(pizza.getDescrizione());
-//        pizzaDto.setUrlImage();
-//
-//    }
+    }
 
+    private static PizzaDto convertPizzaToDto(Pizza pizza) throws IOException {
+        PizzaDto pizzaDto = new PizzaDto();
+        pizzaDto.setNome(pizza.getNome());
+        pizzaDto.setDescrizione(pizza.getDescrizione());
+        pizzaDto.setPrezzo(pizza.getPrezzo());
+        pizzaDto.setIngredients(pizza.getIngredients());
+        pizzaDto.setId(pizza.getId());
+        return pizzaDto;
+    }
 
-    //    public Pizza updatePizza(Pizza pizza, Integer id) {
-//        return pizzaRepository.findById(id).map(existingPizza -> {
-//            existingPizza.setNome(pizza.getNome());
-//            existingPizza.setDescrizione(pizza.getDescrizione());
-//            existingPizza.setUrlImage(pizza.getUrlImage());
-//            existingPizza.setPrezzo(pizza.getPrezzo());
-//            return pizzaRepository.save(existingPizza);
-//        }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pizza with id " + id + " not found"));
-//    }
+    public PizzaDto getPizzaDtoById(Integer id) throws IOException {
+        Pizza pizza = getPizzaById(id);
+        return convertPizzaToDto(pizza);
+    }
+
 
     // metodo per modificare una pizza con un id
     public Pizza updatePizza(Pizza pizza) {
         Pizza pizzaToEdit = getPizzaById(pizza.getId());
         pizzaToEdit.setNome(pizza.getNome());
         pizzaToEdit.setDescrizione(pizza.getDescrizione());
-        pizzaToEdit.setUrlImage(pizza.getUrlImage());
         pizzaToEdit.setPrezzo(pizza.getPrezzo());
         pizzaToEdit.setIngredients(pizza.getIngredients());
+        if (pizza.getCover() != null && pizza.getCover().length > 0) {
+            pizzaToEdit.setCover(pizza.getCover());
+        }
         return pizzaRepository.save(pizzaToEdit);
+    }
+
+    public Pizza updatePizza(PizzaDto pizzaDto) throws IOException {
+        Pizza pizza = convertDtoToPizza(pizzaDto);
+        return updatePizza(pizza);
     }
 
     public void deletePizza(Integer id) {
